@@ -29,12 +29,30 @@ header.append(
 );
 
 header.onload = () => {
-  let active = document.querySelector(
-    `#nav${window.location.hash.toString().replace("#/", "")}`
-  );
+  const navList = {
+    user: "userList",
+    document: "documentList",
+    inbox: "inbox",
+    changePass: "changePass",
+  };
 
-  if (active) {
-    active.style.color = "#004a7f";
+  let ele;
+  for (let x in navList) {
+    if (
+      window.location.hash.toString().replace("#/", "").indexOf(x) >=
+      0
+    ) {
+      ele = x;
+    }
+  }
+
+  const element = navList[ele];
+  if (element) {
+    let active = document.querySelector(`#nav${element}`);
+
+    if (active) {
+      active.style.color = "#004a7f";
+    }
   }
   //document.body.style.backgroundColor = "#cccccc";
 };
