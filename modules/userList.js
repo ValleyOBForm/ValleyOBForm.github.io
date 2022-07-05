@@ -46,7 +46,17 @@ for (let i = 0; i < 10; i++) {
 
 table.append(thead, tbody);
 
-main.append(h1, table);
+const button = d.createElement("button", "Add New User", {
+  onclick: "window.location='#/usersAdd'",
+});
+
+main.append(
+  h1,
+  table,
+  d.createElement("div", button, {
+    class: "button-div",
+  })
+);
 
 userList.append(header, main);
 
