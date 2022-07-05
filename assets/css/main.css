@@ -61,7 +61,7 @@ body {
   transition: all 0.5s;
 }
 
-.container.form-field label {
+.container .form-field label {
   color: rgb(34, 34, 34);
   line-height: 16px;
   margin-top: -8px;
