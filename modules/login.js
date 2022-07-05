@@ -1,5 +1,6 @@
 import d from "../assets/js/NTechDOM.js";
-
+import { pages } from "../assets/js/pages.js";
+import { userList } from "./userList.js";
 const login = d
   .createElement("section")
   .setAttribute({ class: "wrapper" });
@@ -112,7 +113,11 @@ login.onload = () => {
       res = JSON.parse(JSON.parse(res).messege);
       const { result, data } = res;
       if (result) {
-        console.log(result);
+        userList._loginData = data;
+        window.localStorage["com.valleyobform.login"] = data;
+        pages.root = "userList";
+        pages.page = { ...pages.list };
+        window.location = "#/userList";
       } else {
         document.querySelector("#error").style.display = "block";
         submit.setChildren("Login").removeAttribute("disabled");
