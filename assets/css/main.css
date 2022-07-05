@@ -4,6 +4,7 @@ body {
   font-family: Raleway, sans-serif;
   font-size: 14px;
   font-weight: 400;
+  user-select: none;
 }
 
 .wrapper {
@@ -171,4 +172,32 @@ body {
   width: 100%;
   box-shadow: rgb(60 64 67 / 30%) 0px 1px 2px 0px,
     rgb(60 64 67 / 15%) 0 2px 6px 2px;
+  display: flex;
+}
+
+.header .name {
+  width: 100%;
+  color: rgb(0, 74, 127);
+  font: 600 18px Raleway, sans-serif;
+  cursor: pointer;
+  text-align: right;
+  padding: 10px 15px;
+}
+
+.header nav {
+  display: flex;
+  flex-direction: row;
+  font: 400 14px Raleway, sans-serif;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+}
+
+.header nav div {
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+.header nav div:hover {
+  color: #004a7f;
 }

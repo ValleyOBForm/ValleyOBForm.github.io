@@ -3,4 +3,8 @@ import { header } from "./header.js";
 const userList = d.createElement("div");
 
 userList.append(header);
+
+userList.onload = () => {
+  header.onload();
+};
 export { userList };
