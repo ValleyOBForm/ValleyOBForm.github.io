@@ -14,6 +14,7 @@ const thead = d.createElement("thead");
 
 const titles = [
   "Sr No.",
+  "Date",
   "Name",
   "Phone",
   "Email",
@@ -41,7 +42,17 @@ const dataPrint = (data) => {
 };
 
 for (let i = 0; i < 10; i++) {
-  dataPrint([titles]);
+  dataPrint([
+    [
+      i + 1,
+      "05-072022T12:00:00:00",
+      "Test",
+      "123-123-1234",
+      "email@gmail.com",
+      "username",
+      "Update",
+    ],
+  ]);
 }
 
 table.append(thead, tbody);

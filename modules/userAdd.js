@@ -145,7 +145,7 @@ passDiv.append(
   })
 );
 
-const button = d.createElement("button", "Submit", {
+const button = d.createElement("button", "Add", {
   class: "button",
   type: "submit",
 });
