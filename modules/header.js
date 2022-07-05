@@ -36,5 +36,6 @@ header.onload = () => {
   if (active) {
     active.style.color = "#004a7f";
   }
+  document.body.style.backgroundColor = "#cccccc";
 };
 export { header };

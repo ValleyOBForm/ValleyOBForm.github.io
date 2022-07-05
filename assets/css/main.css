@@ -170,8 +170,10 @@ body {
   flex-direction: row;
   align-items: center;
   width: 100%;
-  box-shadow: rgb(60 64 67 / 30%) 0px 1px 2px 0px,
-    rgb(60 64 67 / 15%) 0 2px 6px 2px;
+  /* box-shadow: rgb(60 64 67 / 30%) 0px 1px 2px 0px,
+    rgb(60 64 67 / 15%) 0 2px 6px 2px; */
+  box-shadow: 0 0 10px hsl(0deg 0% 0% / 10%),
+    1px 1px 2px hsl(0deg 0% 0% / 10%);
   display: flex;
 }
 
@@ -200,4 +202,53 @@ body {
 
 .header nav div:hover {
   color: #004a7f;
+}
+
+.main {
+  margin: 60px auto;
+  max-width: 800px;
+  background-color: rgb(255, 255, 255);
+  box-shadow: 0 0 10px hsl(0deg 0% 0% / 10%),
+    1px 1px 2px hsl(0deg 0% 0% / 10%);
+  padding: 36px;
+}
+
+.main h1 {
+  margin: 0;
+  font-size: 24px;
+  font-family: "Open Sans Condensed", Helvetica, sans-serif;
+  font-weight: 700;
+}
+
+.table {
+  table-layout: fixed;
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 30px;
+}
+
+table,
+td,
+th {
+  border: 1px solid rgba(192, 225, 248, 0.473);
+  text-align: center;
+}
+
+td {
+  vertical-align: bottom;
+  font-family: "Open Sans Condensed", Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 300;
+  max-width: max-content;
+}
+
+td:first-child,
+th:first-child {
+  width: 50px;
+}
+
+.table th {
+  font-family: "Open Sans Condensed", Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
 }
