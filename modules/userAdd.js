@@ -22,52 +22,14 @@ const firstName = d.createElement("input").setAttribute({
   required: "",
   autocomplete: "off",
   spellcheck: "false",
-  placeholder: "First",
+  //   placeholder: "First",
   oninput: "nin(this, 1)",
   maxlength: 40,
 });
 
-const lastName = d.createElement("input").setAttribute({
-  required: "",
-  autocomplete: "off",
-  spellcheck: "false",
-  placeholder: "Last",
-  oninput: "nin(this, 2)",
-  maxlength: 40,
-});
 userName.append(
-  d.createElement("div", [firstName, lastName], {
-    class: ["input-field", "rows-input"],
-  }),
-  d.createElement("div", "Error Found").setAttribute({
-    class: "error-div",
-  })
-);
-
-const cityName = d
-  .createElement(
-    "div",
-    d.createElement("label", [
-      "City, State",
-      d.createElement("span", " *"),
-    ])
-  )
-  .setAttribute({ class: ["form-item"] });
-
-const city = d.createElement("input").setAttribute({
-  required: "",
-  autocomplete: "off",
-  spellcheck: "false",
-  oninput: "nin(this, 3)",
-  maxlength: 80,
-});
-
-cityName.append(
-  d.createElement("div", city, {
-    class: "input-field",
-  }),
-  d.createElement("div", "Error Found").setAttribute({
-    class: "error-div",
+  d.createElement("div", [firstName], {
+    class: ["input-field"],
   })
 );
 
@@ -127,17 +89,17 @@ emailAdd.append(
   })
 );
 
-const schoolName = d
+const userDiv = d
   .createElement(
     "div",
     d.createElement("label", [
-      "School Name",
+      "Username",
       d.createElement("span", " *"),
     ])
   )
   .setAttribute({ class: ["form-item"] });
 
-const school = d.createElement("input").setAttribute({
+const user = d.createElement("input").setAttribute({
   required: "",
   autocomplete: "off",
   spellcheck: "false",
@@ -146,8 +108,8 @@ const school = d.createElement("input").setAttribute({
   maxlength: 80,
 });
 
-schoolName.append(
-  d.createElement("div", school, {
+userDiv.append(
+  d.createElement("div", user, {
     class: "input-field",
   }),
   d.createElement("div", "Error Found").setAttribute({
@@ -155,102 +117,32 @@ schoolName.append(
   })
 );
 
-const graduationDate = d
+const passDiv = d
   .createElement(
     "div",
     d.createElement("label", [
-      "Graduation Date",
+      "Password",
       d.createElement("span", " *"),
     ])
   )
   .setAttribute({ class: ["form-item"] });
 
-const graduation = d.createElement("input").setAttribute({
+const pass = d.createElement("input").setAttribute({
   required: "",
   autocomplete: "off",
   spellcheck: "false",
-  type: "date",
-  onchange: "nin(this, 7)",
-});
-
-graduationDate.append(
-  d.createElement("div", graduation, {
-    class: "input-field",
-  }),
-  d.createElement("div", "Error Found").setAttribute({
-    class: "error-div",
-  })
-);
-
-const aboutUs = d
-  .createElement(
-    "div",
-    d.createElement("label", [
-      "How did you hear about us?",
-      d.createElement("span", " *"),
-    ])
-  )
-  .setAttribute({ class: ["form-item"] });
-
-const about = d.createElement("input").setAttribute({
-  required: "",
-  autocomplete: "off",
-  spellcheck: "false",
-  type: "text",
-  oninput: "nin(this, 8)",
+  type: "password",
+  oninput: "nin(this, 6)",
   maxlength: 80,
 });
 
-aboutUs.append(
-  d.createElement("div", about, {
+passDiv.append(
+  d.createElement("div", pass, {
     class: "input-field",
   }),
   d.createElement("div", "Error Found").setAttribute({
     class: "error-div",
   })
-);
-
-const resumeField = d
-  .createElement(
-    "div",
-    d.createElement("label", [
-      "Resume",
-      d.createElement("span", " *"),
-    ])
-  )
-  .setAttribute({
-    class: ["form-item"],
-    id: "file-error-field",
-  });
-
-const resume = d.createElement("input").setAttribute({
-  required: "",
-  autocomplete: "off",
-  spellcheck: "false",
-  type: "file",
-  onchange: "fch(this, 9)",
-  style: "margin-bottom:0",
-});
-
-resumeField.append(
-  d.createElement("div", resume, {
-    class: "input-field",
-  }),
-  d
-    .createElement("div", "Only PDF, Word files may be uploaded.")
-    .setAttribute({
-      class: "error-div",
-      id: "file-error",
-    }),
-  d.createElement(
-    "div",
-    "Please attach resume (< 5MB PDF/Word File ONLY).",
-    {
-      style: [
-        "font-size: 11px; font-style: italic; font-width: 400; font-family: Arial;",
-      ],
-    }
-  )
 );
 
 const button = d.createElement("button", "Submit", {
@@ -271,13 +163,10 @@ error.append(errDiv, closeBtn);
 
 form.append(
   userName,
-  cityName,
   phoneNo,
   emailAdd,
-  schoolName,
-  graduationDate,
-  aboutUs,
-  resumeField,
+  userDiv,
+  passDiv,
   error,
   button
 );
