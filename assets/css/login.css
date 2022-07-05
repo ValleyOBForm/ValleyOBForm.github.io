@@ -29,7 +29,7 @@ body {
 }
 
 .logo {
-  margin-bottom: 30px;
+  margin-bottom: 50px;
   width: 250px;
 }
 
@@ -134,13 +134,22 @@ body {
   cursor: pointer;
 }
 
-.button:hover {
+.button:disabled {
+  border-color: #222222;
+  color: #ffffff;
+}
+
+.button:disabled:before {
+  transform: scaleY(1);
+}
+
+.button:not(:disabled):hover {
   border-color: #222222;
   color: #ffffff;
   /* background-color: transparent; */
 }
 
-.button:hover:before {
+.button:not(:disabled):hover:before {
   transform: scaleY(1);
   /* z-index: 0; */
 }

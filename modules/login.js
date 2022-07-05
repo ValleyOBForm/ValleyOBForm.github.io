@@ -43,16 +43,20 @@ const logo = d.createElement(
   { class: ["center"] }
 );
 
-const form = d.createElement("form").setAttribute({ class: "form" });
+const form = d
+  .createElement("form")
+  .setAttribute({ class: "form", name: "form" });
 const userName = d.createElement("input", "", {
   autocomplete: "off",
   placeholder: " ",
+  required: "",
 });
 
 const password = d.createElement("input", "", {
   autocomplete: "off",
   type: "password",
   placeholder: " ",
+  required: "",
 });
 
 const submit = d.createElement("button", "Login", {
@@ -81,4 +85,39 @@ form.append(
 main.append(logo, form);
 
 login.append(main);
+
+login.onload = () => {
+  document.forms["form"].onsubmit = (e) => {
+    e.preventDefault();
+    submit
+      .setChildren("Please Wait..")
+      .changeAttribute("disabled", "");
+    document.querySelector("#error").style.display = "none";
+    let user = document.querySelector(
+      `div [node="${userName._node}"]`
+    );
+    let pass = document.querySelector(
+      `div [node="${password._node}"]`
+    );
+    d.post(
+      "https://script.google.com/macros/s/AKfycbwGxEujY7EKh3xgV6V0XNLxQlcqW7L-dXKEK_m_/exec",
+      {
+        type: 0,
+        data: JSON.stringify({
+          userName: user.value,
+          password: pass.value,
+        }),
+      }
+    ).then((res) => {
+      res = JSON.parse(JSON.parse(res).messege);
+      const { result, data } = res;
+      if (result) {
+        console.log(result);
+      } else {
+        document.querySelector("#error").style.display = "block";
+        submit.setChildren("Login").removeAttribute("disabled");
+      }
+    });
+  };
+};
 export { login };
