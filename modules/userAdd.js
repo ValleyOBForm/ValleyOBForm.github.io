@@ -5,7 +5,7 @@ const userAdd = d.createElement("div");
 const main = d
   .createElement("main")
   .setAttribute({ class: ["main"] });
-const h1 = d.createElement("h1", "Users List");
+const h1 = d.createElement("h1", "Add New User");
 
 main.append(h1);
 

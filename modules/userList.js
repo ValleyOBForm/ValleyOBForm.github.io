@@ -47,7 +47,7 @@ for (let i = 0; i < 10; i++) {
 table.append(thead, tbody);
 
 const button = d.createElement("button", "Add New User", {
-  onclick: "window.location='#/usersAdd'",
+  onclick: "window.location='#/userAdd'",
 });
 
 main.append(
