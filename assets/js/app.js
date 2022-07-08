@@ -4,6 +4,8 @@ import { pages } from "./pages.js";
 import { userList } from "../../modules/userList.js";
 import { userAdd } from "../../modules/userAdd.js";
 import { changePass } from "../../modules/changePass.js";
+import { documentList } from "../../modules/documentList.js";
+import { documentAdd } from "../../modules/documentAdd.js";
 
 console.log("version " + d.version);
 console.log("Developer : " + d.meta.developer.name);
