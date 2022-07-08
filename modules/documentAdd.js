@@ -126,7 +126,7 @@ documentAdd.onload = () => {
     h1.setChildren("Edit Document Name");
     let { data } = header.documentEdit;
     const src =
-      "https://saffiullahfahim.me/coordinates.ninja/registration/" +
+      "https://valleyobformdocument.github.io/documents/" +
       data[2].substr(1);
     documentName.changeAttribute("value", data[1].substr(1));
     button.setChildren("Edit");
@@ -204,7 +204,7 @@ const addRequest = () => {
   d.readFiles(documentFile.getAttribute("file")[0])
     .then(async (files) => {
       const octokit = new Octokit({
-        auth: "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",
+        auth: "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",
       });
       let fileName = documentName.getAttribute("value")[0];
       if (fileName.substr(fileName.length - 4) == ".pdf")
@@ -215,7 +215,7 @@ const addRequest = () => {
       let type = spitBase[0].split(";")[0].replace("data:", "");
       let file = spitBase[1];
       let test = await octokit.request(
-        "PUT /repos/saffiullahfahim/coordinates.ninja/contents/registration/" +
+        "PUT /repos/valleyobformdocument/documents/contents/" +
           fileId,
         {
           owner: "OWNER",
