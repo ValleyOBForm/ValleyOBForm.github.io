@@ -51,6 +51,7 @@ const userName = d.createElement("input", "", {
   autocomplete: "off",
   placeholder: " ",
   required: "",
+  type: "email",
 });
 
 const password = d.createElement("input", "", {
@@ -105,7 +106,7 @@ login.onload = () => {
       {
         type: 0,
         data: JSON.stringify({
-          userName: user.value,
+          userName: user.value.trim(),
           password: pass.value,
         }),
       }
@@ -117,7 +118,8 @@ login.onload = () => {
         window.localStorage["com.valleyobform.login"] = data;
         pages.root = "userList";
         pages.page = { ...pages.list };
-        window.location = "#/userList";
+        window.location = "./";
+        //window.location = "#/userList";
       } else {
         document.querySelector("#error").style.display = "block";
         submit.setChildren("Login").removeAttribute("disabled");

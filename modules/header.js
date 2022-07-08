@@ -36,7 +36,7 @@ header.onload = () => {
     changePass: "changePass",
   };
 
-  let ele;
+  let ele = "user";
   for (let x in navList) {
     if (
       window.location.hash.toString().replace("#/", "").indexOf(x) >=

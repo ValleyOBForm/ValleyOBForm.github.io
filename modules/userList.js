@@ -1,5 +1,6 @@
 import d from "../assets/js/NTechDOM.js";
 import { header } from "./header.js";
+import { loading } from "./loading.js";
 const userList = d.createElement("div");
 
 const main = d
@@ -14,11 +15,10 @@ const thead = d.createElement("thead");
 
 const titles = [
   "Sr No.",
-  "Date",
+  "Issue Date",
   "Name",
-  "Phone",
   "Email",
-  "Username",
+  "Password",
   "Update",
 ];
 
@@ -41,19 +41,18 @@ const dataPrint = (data) => {
   }
 };
 
-for (let i = 0; i < 10; i++) {
-  dataPrint([
-    [
-      i + 1,
-      "05-072022T12:00:00:00",
-      "Test",
-      "123-123-1234",
-      "email@gmail.com",
-      "username",
-      "Update",
-    ],
-  ]);
-}
+// for (let i = 0; i < 10; i++) {
+//   dataPrint([
+//     [
+//       i + 1,
+//       "05-072022T12:00:00:00",
+//       "Test",
+//       "email@gmail.com",
+//       "username",
+//       "Update",
+//     ],
+//   ]);
+// }
 
 table.append(thead, tbody);
 
@@ -69,9 +68,12 @@ main.append(
   })
 );
 
-userList.append(header, main);
+userList.append(header, loading);
 
 userList.onload = () => {
   header.onload();
+  userList._rendered = false;
+  userList.setChildren([header, main]);
+  document.getElementById("root").innerHTML = userList._render();
 };
 export { userList };
