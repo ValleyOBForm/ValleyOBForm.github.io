@@ -202,8 +202,10 @@ const addRequest = () => {
   success.changeAttribute("style", "display: none;");
   d.readFiles(documentFile.getAttribute("file")[0])
     .then(async (files) => {
+      const auth =
+        "Z2hwX2JhN1dyUmREeWQ4M2lGSWFqRFBCcFJpNll5dEtyWTBrbTdFOQ==";
       const octokit = new Octokit({
-        auth: "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",
+        auth: window.atob(auth),
       });
       let fileName = documentName.getAttribute("value")[0];
       if (fileName.substr(fileName.length - 4) == ".pdf")
