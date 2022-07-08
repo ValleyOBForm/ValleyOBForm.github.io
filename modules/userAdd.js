@@ -308,6 +308,9 @@ const deleteRequest = (id) => {
       res = JSON.parse(JSON.parse(res).messege);
       const { result } = res;
       if (result) {
+        button2
+          .setChildren("Delete")
+          .removeAttribute("disabled", "style");
         form.setChildren(success);
         succDiv.setChildren("Successfully delete user.");
         success.changeAttribute("style", "display: flex");

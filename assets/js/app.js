@@ -3,6 +3,8 @@ import { login } from "../../modules/login.js";
 import { pages } from "./pages.js";
 import { userList } from "../../modules/userList.js";
 import { userAdd } from "../../modules/userAdd.js";
+import { changePass } from "../../modules/changePass.js";
+
 console.log("version " + d.version);
 console.log("Developer : " + d.meta.developer.name);
 console.log("Developer Profile : " + d.meta.developer.profile);

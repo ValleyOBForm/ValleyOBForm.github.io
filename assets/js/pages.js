@@ -3,6 +3,7 @@ const pages = {
     logout: "login",
     userList: "userList",
     userAdd: "userAdd",
+    changePass: "changePass",
   },
   page: {},
   root: "login",
