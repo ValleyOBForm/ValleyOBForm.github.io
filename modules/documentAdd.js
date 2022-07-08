@@ -1,5 +1,6 @@
 import d from "../assets/js/NTechDOM.js";
 import { header } from "./header.js";
+import { Octokit } from "https://cdn.skypack.dev/@octokit/core";
 const documentAdd = d.createElement("div");
 
 const main = d
@@ -75,6 +76,15 @@ const button = d.createElement("button", "Add", {
   type: "submit",
 });
 
+const button2 = d.createElement("button", "Delete", {
+  class: ["button", "delBtn"],
+  type: "button",
+});
+
+const iframe = d.createElement("iframe").setAttribute({
+  class: "iframe",
+});
+
 const error = d.createElement("div", "", { class: "error" });
 const errDiv = d.createElement("div", "Error! Please try again.", {
   style: "width: 100%; text-align: left;",
@@ -113,17 +123,31 @@ documentAdd.onload = () => {
   header.onload();
   form.reset();
   if (header.documentEdit) {
-    form.append(button2);
-    h1.setChildren("Edit user data");
-    let { data } = header.userEdit;
-    documentName.changeAttribute("value", data[3].substr(1));
+    h1.setChildren("Edit Document Name");
+    let { data } = header.documentEdit;
+    const src =
+      "https://saffiullahfahim.me/coordinates.ninja/registration/" +
+      data[2].substr(1);
+    documentName.changeAttribute("value", data[1].substr(1));
     button.setChildren("Edit");
+    form.setChildren([
+      documentDiv,
+      error,
+      success,
+      button,
+      button2,
+      iframe.changeAttribute("src", src),
+    ]);
     document.forms["form"].onsubmit = (e) => {
       e.preventDefault();
-      editRequest(data[0].substr(1), data[4].substr(1));
+      editRequest(
+        data[0].substr(1),
+        data[2].substr(1),
+        data[3].substr(1)
+      );
     };
     document.querySelector(".delBtn").onclick = () => {
-      deleteRequest(data[4].substr(1));
+      deleteRequest(data[3].substr(1));
     };
     return;
   }
@@ -135,6 +159,32 @@ documentAdd.onload = () => {
 
   window.nin = (v, i) => {
     eval(i).changeAttributeN("value", v.value);
+  };
+
+  window.fch = (v, input) => {
+    let file = v.files[0];
+    let Err = document.getElementById("file-error");
+    Err.style.opacity = "0";
+    Err.style.marginTop = "-20px";
+    Err.style.marginLeft = "150px";
+    if (file.type == "application/pdf") {
+      eval(input).changeAttributeN("file", v.files[0]);
+    } else {
+      Err.style.opacity = "1";
+      Err.style.marginTop = "0";
+      Err.style.marginLeft = "0";
+      eval(input).changeAttributeN("file", v.files[0]);
+      eval(input).changeAttribute("t", "");
+      Err.innerText = "Only PDF files may be uploaded.";
+    }
+
+    if (file.size > 5242880) {
+      eval(input).changeAttribute("t", "");
+      Err.style.opacity = "1";
+      Err.style.marginTop = "0";
+      Err.style.marginLeft = "0";
+      Err.innerText = "Error! PDF file size < 5MB";
+    }
   };
 };
 
@@ -151,49 +201,74 @@ const addRequest = () => {
     ]);
   error.changeAttribute("style", "display: none;");
   success.changeAttribute("style", "display: none;");
-  d.post(
-    "https://script.google.com/macros/s/AKfycbwGxEujY7EKh3xgV6V0XNLxQlcqW7L-dXKEK_m_/exec",
-    {
-      type: 10,
-      data: JSON.stringify({
-        date: "",
-        userName: firstName.getAttribute("value")[0].trim(),
-        user: user.getAttribute("value")[0].trim(),
-        pass: pass.getAttribute("value")[0],
-        database: window.localStorage["com.valleyobform.login"],
-      }),
-    }
-  )
-    .then((res) => {
-      res = JSON.parse(JSON.parse(res).messege);
-      const { result, messege } = res;
-      if (result) {
-        if (messege == "success") {
-          form.reset();
-          main.setChildren([h1, form]);
-          success.changeAttribute("style", "display: flex");
-          button
-            .setChildren("Add")
-            .removeAttribute("disabled", "style");
-          document.forms["form"].onsubmit = (e) => {
-            e.preventDefault();
-            addRequest();
-          };
-        } else {
-          errDiv.setChildren("Username already exiest!");
+  d.readFiles(documentFile.getAttribute("file")[0])
+    .then(async (files) => {
+      const octokit = new Octokit({
+        auth: "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",
+      });
+      let fileName = documentName.getAttribute("value")[0];
+      if (fileName.substr(fileName.length - 4) == ".pdf")
+        fileName = fileName.substr(0, fileName.length - 4);
+
+      let fileId = fileName + new Date().getTime() + ".pdf";
+      let spitBase = files[0].split(",");
+      let type = spitBase[0].split(";")[0].replace("data:", "");
+      let file = spitBase[1];
+      let test = await octokit.request(
+        "PUT /repos/saffiullahfahim/coordinates.ninja/contents/registration/" +
+          fileId,
+        {
+          owner: "OWNER",
+          repo: "REPO",
+          path: "PATH",
+          message: "my commit message",
+          committer: {
+            name: "Saffiullah Fahim",
+            email: "fahim14@student.sust.edu",
+          },
+          content: file,
+        }
+      );
+      d.post(
+        "https://script.google.com/macros/s/AKfycbwGxEujY7EKh3xgV6V0XNLxQlcqW7L-dXKEK_m_/exec",
+        {
+          type: 7,
+          data: JSON.stringify({
+            date: "",
+            fileName: fileName,
+            fileId: fileId,
+            //content: files[0],
+            database: window.localStorage["com.valleyobform.login"],
+          }),
+        }
+      )
+        .then((res) => {
+          res = JSON.parse(JSON.parse(res).messege);
+          const { result } = res;
+          if (result) {
+            form.reset();
+            main.setChildren([h1, form]);
+            success.changeAttribute("style", "display: flex");
+            button
+              .setChildren("Add")
+              .removeAttribute("disabled", "style");
+          } else {
+            errDiv.setChildren("Error! Try agian");
+            error.changeAttribute("style", "display: flex");
+            button
+              .setChildren("Add")
+              .removeAttribute("disabled", "style");
+            console.log("Error! Please try again.", data);
+          }
+        })
+        .catch((err) => {
+          errDiv.setChildren("Error! Try agian");
           error.changeAttribute("style", "display: flex");
           button
             .setChildren("Add")
             .removeAttribute("disabled", "style");
-        }
-      } else {
-        errDiv.setChildren("Error! Try agian");
-        error.changeAttribute("style", "display: flex");
-        button
-          .setChildren("Add")
-          .removeAttribute("disabled", "style");
-        console.log("Error! Please try again.", data);
-      }
+          console.log("Error! Please try again.", err);
+        });
     })
     .catch((err) => {
       errDiv.setChildren("Error! Try agian");
@@ -203,7 +278,7 @@ const addRequest = () => {
     });
 };
 
-const editRequest = (date, id) => {
+const editRequest = (date, fileId, id) => {
   button
     .setChildren(
       `
@@ -216,15 +291,17 @@ const editRequest = (date, id) => {
     ]);
   error.changeAttribute("style", "display: none;");
   success.changeAttribute("style", "display: none;");
+  let fileName = documentName.getAttribute("value")[0];
+  if (fileName.substr(fileName.length - 4) == ".pdf")
+    fileName = fileName.substr(0, fileName.length - 4);
   d.post(
     "https://script.google.com/macros/s/AKfycbwGxEujY7EKh3xgV6V0XNLxQlcqW7L-dXKEK_m_/exec",
     {
-      type: 3,
+      type: 8,
       data: JSON.stringify({
         date: date,
-        userName: firstName.getAttribute("value")[0].trim(),
-        user: user.getAttribute("value")[0].trim(),
-        pass: pass.getAttribute("value")[0],
+        fileName: fileName,
+        fileId: fileId,
         id: id,
         database: window.localStorage["com.valleyobform.login"],
       }),
@@ -273,7 +350,7 @@ const deleteRequest = (id) => {
   d.post(
     "https://script.google.com/macros/s/AKfycbwGxEujY7EKh3xgV6V0XNLxQlcqW7L-dXKEK_m_/exec",
     {
-      type: 4,
+      type: 9,
       data: JSON.stringify({
         id: id,
         database: window.localStorage["com.valleyobform.login"],
