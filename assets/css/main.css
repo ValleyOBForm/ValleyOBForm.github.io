@@ -214,6 +214,7 @@ body {
   background-color: #f6f8fa;
   border-radius: 6px;
   padding: 36px;
+  animation: bounceIn 2s;
 }
 
 .main h1 {
@@ -247,8 +248,17 @@ td {
   vertical-align: top;
 }
 
+td img {
+  width: 14px;
+}
+
+td:last-child {
+  vertical-align: middle;
+}
+
 tbody tr:nth-child(odd) {
   background-color: #fafafa;
+  cursor: pointer;
 }
 
 tbody tr:hover {
@@ -430,6 +440,14 @@ th:first-child {
   align-items: center;
 }
 
+.main .form .delBtn {
+  background-color: rgb(138, 18, 18);
+  border: 1px solid #fff;
+  position: relative;
+  margin-top: -33px;
+  margin-left: 100px;
+}
+
 .main .form .button svg {
   width: 23.5px;
   fill: #fff;
@@ -454,6 +472,10 @@ th:first-child {
 
 .main .button:not([disabled]):hover {
   box-shadow: 0 0 1.5px 1.5px rgb(33, 158, 253);
+}
+
+.main .delBtn:not([disabled]):hover {
+  box-shadow: 0 0 1.5px 1.5px rgb(138, 18, 18);
 }
 
 .main input::placeholder {
@@ -483,6 +505,7 @@ th:first-child {
   );
   border: 1px solid rgba(50, 205, 50, 0.604);
   color: #24292f;
+  animation-name: bounceIn;
 }
 
 @keyframes shakeX {

@@ -31,28 +31,42 @@ thead.append(theadTr);
 
 const tbody = d.createElement("tbody");
 
+const dateCovert = (date) => {
+  date = new Date(date);
+  return (
+    String(date.getMonth() + 1).padStart(2, "0") +
+    "-" +
+    String(date.getDate()).padStart(2, "0") +
+    "-" +
+    date.getFullYear()
+  );
+};
+
 const dataPrint = (data) => {
   let tr = d.createElement("tr");
   for (let i = 0; i < data.length; i++) {
-    for (let j = 0; j < data[i].length; j++) {
-      tr.append(d.createElement("td", data[i][j]));
+    tr.append(d.createElement("td", i + 1));
+    tr.append(
+      d.createElement("td", dateCovert(data[i][0].substr(1)))
+    );
+    for (let j = 1; j < data[i].length - 1; j++) {
+      tr.append(d.createElement("td", data[i][j].substr(1)));
     }
+    tr.append(
+      d.createElement(
+        "td",
+        d.createElement("img").setAttribute(
+          {
+            src: "./edit.svg",
+            edit: i,
+          },
+          { style: "padding: 0;" }
+        )
+      )
+    );
     tbody.append(tr);
   }
 };
-
-// for (let i = 0; i < 10; i++) {
-//   dataPrint([
-//     [
-//       i + 1,
-//       "05-072022T12:00:00:00",
-//       "Test",
-//       "email@gmail.com",
-//       "username",
-//       "Update",
-//     ],
-//   ]);
-// }
 
 table.append(thead, tbody);
 
@@ -71,9 +85,40 @@ main.append(
 userList.append(header, loading);
 
 userList.onload = () => {
+  delete header.userEdit;
   header.onload();
-  userList._rendered = false;
-  userList.setChildren([header, main]);
-  document.getElementById("root").innerHTML = userList._render();
+  d.post(
+    "https://script.google.com/macros/s/AKfycbwGxEujY7EKh3xgV6V0XNLxQlcqW7L-dXKEK_m_/exec",
+    {
+      type: 1,
+      data: JSON.stringify({
+        database: window.localStorage["com.valleyobform.login"],
+      }),
+    }
+  )
+    .then((res) => {
+      res = JSON.parse(JSON.parse(res).messege);
+      const { result, data } = res;
+      if (result) {
+        userList._rendered = false;
+        userList.setChildren([header, main]);
+        document.getElementById("root").innerHTML =
+          userList._render();
+        header.onload();
+        dataPrint(data);
+        for (let i = 0; i < data.length; i++) {
+          document.querySelector(`img[edit="${i}"]`).onclick = () => {
+            header.userEdit = {
+              data: data[i],
+            };
+            window.location = "#/userAdd";
+          };
+        }
+      } else alert("Error! Try again.");
+    })
+    .catch((err) => {
+      alert("Error! Try again.");
+      console.log(err);
+    });
 };
 export { userList };
