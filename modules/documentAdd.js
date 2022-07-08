@@ -203,7 +203,7 @@ const addRequest = () => {
   d.readFiles(documentFile.getAttribute("file")[0])
     .then(async (files) => {
       const octokit = new Octokit({
-        auth: "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",
+        auth: "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",
       });
       let fileName = documentName.getAttribute("value")[0];
       if (fileName.substr(fileName.length - 4) == ".pdf")
