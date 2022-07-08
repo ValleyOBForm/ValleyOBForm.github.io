@@ -43,8 +43,8 @@ const dateCovert = (date) => {
 };
 
 const dataPrint = (data) => {
-  let tr = d.createElement("tr");
   for (let i = 0; i < data.length; i++) {
+    let tr = d.createElement("tr");
     tr.append(d.createElement("td", i + 1));
     tr.append(
       d.createElement("td", dateCovert(data[i][0].substr(1)))

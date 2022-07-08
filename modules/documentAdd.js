@@ -126,8 +126,7 @@ documentAdd.onload = () => {
     h1.setChildren("Edit Document Name");
     let { data } = header.documentEdit;
     const src =
-      "https://valleyobformdocument.github.io/documents/" +
-      data[2].substr(1);
+      "https://valleyobform.github.io/documents/" + data[2].substr(1);
     documentName.changeAttribute("value", data[1].substr(1));
     button.setChildren("Edit");
     form.setChildren([
@@ -204,7 +203,7 @@ const addRequest = () => {
   d.readFiles(documentFile.getAttribute("file")[0])
     .then(async (files) => {
       const octokit = new Octokit({
-        auth: "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",
+        auth: "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",
       });
       let fileName = documentName.getAttribute("value")[0];
       if (fileName.substr(fileName.length - 4) == ".pdf")
@@ -215,16 +214,15 @@ const addRequest = () => {
       let type = spitBase[0].split(";")[0].replace("data:", "");
       let file = spitBase[1];
       let test = await octokit.request(
-        "PUT /repos/valleyobformdocument/documents/contents/" +
-          fileId,
+        "PUT /repos/ValleyOBForm/documents/contents/" + fileId,
         {
           owner: "OWNER",
           repo: "REPO",
           path: "PATH",
           message: "my commit message",
           committer: {
-            name: "Saffiullah Fahim",
-            email: "fahim14@student.sust.edu",
+            name: "ValleyOBForm",
+            email: "valleyobform@gmail.com",
           },
           content: file,
         }
