@@ -125,8 +125,7 @@ documentAdd.onload = () => {
   if (header.documentEdit) {
     h1.setChildren("Edit Document Name");
     let { data } = header.documentEdit;
-    const src =
-      "https://valleyobform.github.io/documents/" + data[2].substr(1);
+    const src = "/viewer.html?fileId=" + data[2].substr(1);
     documentName.changeAttribute("value", data[1].substr(1));
     button.setChildren("Edit");
     form.setChildren([
@@ -203,7 +202,7 @@ const addRequest = () => {
   d.readFiles(documentFile.getAttribute("file")[0])
     .then(async (files) => {
       const auth =
-        "Z2hwX2JhN1dyUmREeWQ4M2lGSWFqRFBCcFJpNll5dEtyWTBrbTdFOQ==";
+        "Z2hwXzRvQ2FCVmhRMU5wWjRIR3E4MmxqOVJXU2JyaTRtNDM3ekhQTA==";
       const octokit = new Octokit({
         auth: window.atob(auth),
       });
@@ -216,7 +215,8 @@ const addRequest = () => {
       let type = spitBase[0].split(";")[0].replace("data:", "");
       let file = spitBase[1];
       let test = await octokit.request(
-        "PUT /repos/ValleyOBForm/documents/contents/" + fileId,
+        "PUT /repos/valleyobformdocument/documents/contents/" +
+          fileId,
         {
           owner: "OWNER",
           repo: "REPO",

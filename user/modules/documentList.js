@@ -91,7 +91,7 @@ documentList.onload = () => {
         dataPrint(data);
         for (let i = 0; i < data.length; i++) {
           document.querySelector(`img[edit="${i}"]`).onclick = () => {
-            header.documentEdit = {
+            header.documentView = {
               data: data[i],
             };
             window.location = "#/documentView";

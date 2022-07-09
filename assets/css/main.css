@@ -250,15 +250,19 @@ td {
 
 td img {
   width: 14px;
+  cursor: pointer;
 }
 
 td:last-child {
   vertical-align: middle;
 }
 
+/* tr {
+  cursor: pointer;
+} */
+
 tbody tr:nth-child(odd) {
   background-color: #fafafa;
-  cursor: pointer;
 }
 
 tbody tr:hover {
