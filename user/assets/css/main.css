@@ -166,55 +166,72 @@ body {
   position: fixed;
   top: 0;
   z-index: 1;
-  background-color: #fcfcfc;
+  /* background-color: #fcfcfc; */
   flex-direction: row;
   align-items: center;
   width: 100%;
   /* box-shadow: rgb(60 64 67 / 30%) 0px 1px 2px 0px,
     rgb(60 64 67 / 15%) 0 2px 6px 2px; */
-  box-shadow: 0 0 10px hsl(0deg 0% 0% / 10%),
-    1px 1px 2px hsl(0deg 0% 0% / 10%);
+  /* box-shadow: 0 0 10px hsl(0deg 0% 0% / 10%),
+    1px 1px 2px hsl(0deg 0% 0% / 10%); */
   display: flex;
 }
 
-.header .name {
-  width: 100%;
-  color: rgb(0, 74, 127);
-  font: 600 18px Raleway, sans-serif;
-  cursor: pointer;
-  text-align: right;
-  padding: 10px 15px;
+.header .logo2 {
+  max-height: 30px;
+  padding: 0 5px;
+  margin-left: 20px;
+}
+
+.header .logo2 svg {
+  height: 35px;
 }
 
 .header nav {
   display: flex;
   flex-direction: row;
-  font: 400 14px Raleway, sans-serif;
-  justify-content: flex-start;
+  font: 600 14px Raleway, sans-serif;
+  justify-content: flex-end;
   align-items: center;
   width: 100%;
+  color: rgb(33, 37, 41);
+  fill: rgb(33, 37, 41);
 }
 
 .header nav div {
-  padding: 15px;
-  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.header nav div:hover {
-  color: #004a7f;
+.header nav .div {
+  padding: 15px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.header nav .div svg {
+  width: 25px;
+  padding: 0 5px;
+}
+
+.header nav .div:hover {
+  color: #0e78c4;
+  fill: #0e78c4;
 }
 
 .main {
-  margin: 80px auto;
+  margin: 100px auto;
   max-width: 800px;
-  background-color: #f6f8fa;
   /* box-shadow: 0 0 10px hsl(0deg 0% 0% / 10%),
     1px 1px 2px hsl(0deg 0% 0% / 10%); */
-  border: 1px solid #d8dee4;
-  background-color: #f6f8fa;
+  /* border: 1px solid #d8dee4;
+  background-color: #f6f8fa; */
   border-radius: 6px;
   padding: 36px;
-  animation: bounceIn 2s;
+  /* animation: bounceIn 2s; */
 }
 
 .main h1 {
@@ -238,11 +255,17 @@ th {
   text-align: center;
 }
 
+th {
+  font-family: Raleway, sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+}
+
 td {
   vertical-align: bottom;
-  font-family: "Open Sans Condensed", Helvetica, sans-serif;
+  font-family: Raleway, sans-serif;
   font-size: 14px;
-  font-weight: 300;
+  font-weight: 500;
   max-width: max-content;
   padding: 5px;
   vertical-align: top;
@@ -511,11 +534,11 @@ th:first-child {
 .main .iframe {
   margin: 30px auto 0;
   max-width: 800px;
-  border: 1px solid #d8dee4;
-  background-color: #f6f8fa;
+  border: 1px solid #eee;
+  background-color: #fff;
   border-radius: 6px;
   width: 100%;
-  height: 500px;
+  height: calc(100vh - 62px - 72px - 100px);
 }
 
 @keyframes shakeX {

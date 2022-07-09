@@ -101,7 +101,7 @@ const success = d.createElement("div", "", {
 });
 const succDiv = d.createElement(
   "div",
-  "Successfully added new user!",
+  "Successfully added new document!",
   {
     style: "width: 100%; text-align: left;",
   }
@@ -125,7 +125,8 @@ documentAdd.onload = () => {
   if (header.documentEdit) {
     h1.setChildren("Edit Document Name");
     let { data } = header.documentEdit;
-    const src = "/viewer.html?fileId=" + data[2].substr(1);
+    const src =
+      "./assets/pdf.js/web/viewer.html?fileId=" + data[2].substr(1);
     documentName.changeAttribute("value", data[1].substr(1));
     button.setChildren("Edit");
     form.setChildren([
@@ -210,7 +211,7 @@ const addRequest = () => {
       if (fileName.substr(fileName.length - 4) == ".pdf")
         fileName = fileName.substr(0, fileName.length - 4);
 
-      let fileId = fileName + new Date().getTime() + ".pdf";
+      let fileId = new Date().getTime() + ".pdf";
       let spitBase = files[0].split(",");
       let type = spitBase[0].split(";")[0].replace("data:", "");
       let file = spitBase[1];

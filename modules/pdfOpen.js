@@ -1,5 +1,5 @@
 import { Octokit } from "https://cdn.skypack.dev/@octokit/core";
-
+import d from "../assets/js/NTechDOM.js";
 const getURLParameter = (parameter) => {
   let data = [];
   let url = window.location.toString();
@@ -15,20 +15,25 @@ const getURLParameter = (parameter) => {
   return "";
 };
 
-const auth =
-  "Z2hwXzRvQ2FCVmhRMU5wWjRIR3E4MmxqOVJXU2JyaTRtNDM3ekhQTA==";
-const octokit = new Octokit({
-  auth: window.atob(auth),
-});
+// const auth =
+//   "Z2hwXzRvQ2FCVmhRMU5wWjRIR3E4MmxqOVJXU2JyaTRtNDM3ekhQTA==";
+// const octokit = new Octokit({
+//   auth: window.atob(auth),
+// });
+// console.log(getURLParameter("fileId"));
+// let test = await octokit.request(
+//   "GET /repos/valleyobformdocument/documents/contents/" +
+//     getURLParameter("fileId"),
+//   {
+//     owner: "OWNER",
+//     repo: "REPO",
+//     path: "PATH",
+//   }
+// );
 
-let test = await octokit.request(
-  "GET /repos/valleyobformdocument/documents/contents/" +
-    getURLParameter("fileId"),
-  {
-    owner: "OWNER",
-    repo: "REPO",
-    path: "PATH",
-  }
+const test = await d.getBlobData64(
+  "https://raw.githubusercontent.com/valleyobformdocument/documents/main/" +
+    getURLParameter("fileId")
 );
 
 function convertDataURIToBinary(dataURI) {
@@ -43,7 +48,7 @@ function convertDataURIToBinary(dataURI) {
 }
 
 PDFViewerApplication.open(
-  convertDataURIToBinary(test.data.content)
+  convertDataURIToBinary(test.split(",")[1])
 ).then(() => {
   document.getElementById("loading").style.display = "none";
 });

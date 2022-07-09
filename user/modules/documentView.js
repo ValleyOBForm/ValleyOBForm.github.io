@@ -5,7 +5,7 @@ const documentView = d.createElement("div");
 
 const main = d
   .createElement("main")
-  .setAttribute({ class: ["main"] });
+  .setAttribute({ class: ["main"], style: "margin-bottom: 0" });
 
 const form = d.createElement("form").setAttribute({ class: "form" });
 const h1 = d.createElement("h1", "Document Name");
@@ -22,7 +22,9 @@ documentView.onload = () => {
   if (header.documentView) {
     let { data } = header.documentView;
     h1.setChildren(data[1].substr(1));
-    const src = "/viewer.html?fileId=" + data[2].substr(1);
+    const src =
+      "./../assets/pdf.js/web/viewer.html?fileId=" +
+      data[2].substr(1);
     form.setChildren([iframe.changeAttribute("src", src)]);
   } else {
     window.location = "./";
