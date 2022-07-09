@@ -13,7 +13,7 @@ const header = d.createElement("header").setAttribute({
 
 const item = {
   Documents: ["documentList", docIcon],
-  "Send Mail": ["sendMail", sendIcon],
+  "Send Email": ["sendEmail", sendIcon],
   Inbox: ["inbox", inboxIcon],
   Logout: ["logout", logoutIcon],
 };
@@ -44,7 +44,7 @@ header.onload = () => {
   const navList = {
     document: "documentList",
     inbox: "inbox",
-    mail: "sendMail",
+    mail: "sendEmail",
   };
 
   let ele = "user";

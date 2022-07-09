@@ -536,7 +536,7 @@ th:first-child {
   max-width: 800px;
   border: 1px solid #eee;
   background-color: #fff;
-  border-radius: 6px;
+  border-radius: 3px;
   width: 100%;
   height: calc(100vh - 62px - 72px - 100px);
 }

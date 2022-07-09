@@ -70,6 +70,10 @@ documentList.append(header, loading);
 documentList.onload = () => {
   delete header.documentEdit;
   header.onload();
+  tbody.setChildren([""]);
+  documentList._rendered = false;
+  documentList.setChildren([header, loading]);
+  document.getElementById("root").innerHTML = documentList._render();
   d.post(
     "https://script.google.com/macros/s/AKfycby9aYhOTJFe6qKsEpJ5CSfpntcrk4OWhCoZqiEVSA/exec",
     {

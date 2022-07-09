@@ -5,7 +5,10 @@ const documentView = d.createElement("div");
 
 const main = d
   .createElement("main")
-  .setAttribute({ class: ["main"], style: "margin-bottom: 0" });
+  .setAttribute({
+    class: ["main"],
+    style: "margin-bottom: 0; padding-bottom: 0;",
+  });
 
 const form = d.createElement("form").setAttribute({ class: "form" });
 const h1 = d.createElement("h1", "Document Name");

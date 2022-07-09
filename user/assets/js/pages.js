@@ -3,6 +3,7 @@ const pages = {
     logout: "login",
     documentList: "documentList",
     documentView: "documentView",
+    sendEmail: "sendEmail",
   },
   page: {},
   root: "login",
