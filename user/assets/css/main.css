@@ -7,6 +7,10 @@ body {
   user-select: none;
 }
 
+#root {
+  overflow: hidden;
+}
+
 .wrapper {
   display: flex;
   flex-direction: column;
@@ -234,6 +238,13 @@ body {
   /* animation: bounceIn 2s; */
 }
 
+.line {
+  margin: 100px auto 0;
+  max-width: 800px;
+  display: flex;
+  flex-direction: row;
+}
+
 .main h1 {
   margin: 0;
   font-size: 24px;
@@ -388,19 +399,27 @@ th:first-child {
   transition: all 0.5s;
 }
 
+.line .form-item {
+  display: flex;
+  flex-direction: row !important;
+  align-items: center;
+}
+
 .main .form-item-error {
   padding: 0 5px;
   background-color: #faeaea;
   /* transform: scale(0.99); */
 }
 
-.main .form-item label {
+.main .form-item label,
+.line .form-item label {
   font-family: "Open Sans Condensed", Helvetica, sans-serif;
   font-size: 14px;
   font-weight: 700;
 }
 
-.main .form-item label span {
+.main .form-item label span,
+.line .form-item label span {
   color: rgb(204, 42, 36);
 }
 
@@ -412,7 +431,8 @@ th:first-child {
   /* flex-wrap: wrap; */
 }
 
-.main .input-field input {
+.main .input-field input,
+.line .input-field input {
   width: 100%;
   background-color: rgb(255, 255, 255);
   border: 1px solid rgb(204, 204, 204);
@@ -426,11 +446,19 @@ th:first-child {
   transition: all 0.3s;
 }
 
+.line .input-field input {
+  margin: 0 10px;
+  padding: 5px;
+  width: 280px;
+  /* border: 1px solid transparent; */
+}
+
 .main .rows-input input:first-child {
   margin-right: 10px;
 }
 
-.main .input-field input:focus {
+.main .input-field input:focus,
+.line .input-field input:focus {
   border-color: rgb(33, 158, 253);
 }
 
@@ -446,7 +474,8 @@ th:first-child {
   margin-left: 150px;
 }
 
-.main .form .button {
+.main .form .button,
+.line .button {
   background-color: rgb(0, 93, 180);
   border: 1px solid #fff;
   border-radius: 3px;
@@ -463,6 +492,13 @@ th:first-child {
   align-items: center;
 }
 
+.line .button {
+  margin-top: 0;
+  padding: 4px 0;
+  min-width: max-content;
+  width: 75px;
+}
+
 .main .form .delBtn {
   background-color: rgb(138, 18, 18);
   border: 1px solid #fff;
@@ -471,13 +507,18 @@ th:first-child {
   margin-left: 100px;
 }
 
-.main .form .button svg {
+.main .form .button svg,
+.line .button svg {
   width: 23.5px;
   fill: #fff;
   animation-name: spin;
   animation-duration: 0.5s;
   animation-iteration-count: infinite;
   animation-timing-function: linear;
+}
+
+.line .button svg {
+  width: 20px;
 }
 
 @keyframes spin {
@@ -489,11 +530,13 @@ th:first-child {
   }
 }
 
-.main .form .button:not([disabled]) {
+.main .form .button:not([disabled]),
+.line .button:not([disabled]) {
   cursor: pointer;
 }
 
-.main .button:not([disabled]):hover {
+.main .button:not([disabled]):hover,
+.line .button:not([disabled]):hover {
   box-shadow: 0 0 1.5px 1.5px rgb(33, 158, 253);
 }
 

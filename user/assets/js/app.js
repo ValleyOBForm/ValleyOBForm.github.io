@@ -2,7 +2,6 @@ import d from "../../../assets/js/NTechDOM.js";
 import { login } from "../../modules/login.js";
 import { pages } from "./pages.js";
 import { documentList } from "../../modules/documentList.js";
-import { documentView } from "../../modules/documentView.js";
 import { sendEmail } from "../../modules/sendEmail.js";
 console.log("version " + d.version);
 console.log("Developer : " + d.meta.developer.name);
@@ -23,7 +22,10 @@ if (window.localStorage["com.valleyobform.login.user"]) {
   }
 } else d.render("root", login);
 
-window.hashchange = () => {
+window.hashchange = async () => {
+  if (PDFViewerApplication.pdfLoadingTask) {
+    await PDFViewerApplication.close();
+  }
   if (pages.page[window.location.hash.toString().replace("#/", "")]) {
     d.render(
       "root",

@@ -1,21 +1,36 @@
 import d from "../../assets/js/NTechDOM.js";
+import { Octokit } from "https://cdn.skypack.dev/@octokit/core";
 import { header } from "./header.js";
+import { doc } from "./pdfViewer.js";
 const sendEmail = d.createElement("div");
 
-const main = d
-  .createElement("main")
-  .setAttribute({ class: ["main"] });
-const h1 = d.createElement("h1", "Send Email");
+const main = d.createElement("main").setAttribute({
+  class: ["main"],
+  style: "margin-bottom: 0; padding-bottom: 0; margin-top: 0;",
+});
 
-const form = d
-  .createElement("form")
-  .setAttribute({ class: "form", name: "form" });
+const form = d.createElement("div").setAttribute({
+  class: "iframe",
+  style: "margin-top :0; padding-top: 0;",
+});
+
+async function convertDataURIToBinary(fileId) {
+  let dataURI = await d.getBlobData64(
+    "https://raw.githubusercontent.com/valleyobformdocument/documents/main/" +
+      fileId
+  );
+  var raw = window.atob(dataURI.split(",")[1]);
+  var rawLength = raw.length;
+
+  var array = new Uint8Array(new ArrayBuffer(rawLength));
+  for (let i = 0; i < rawLength; i++) {
+    array[i] = raw.charCodeAt(i) & 0xff;
+  }
+  return array;
+}
 
 const emailDiv = d
-  .createElement(
-    "div",
-    d.createElement("label", ["Email", d.createElement("span", " *")])
-  )
+  .createElement("div", d.createElement("label", "Email"))
   .setAttribute({ class: ["form-item"] });
 
 const email = d.createElement("input").setAttribute({
@@ -25,25 +40,17 @@ const email = d.createElement("input").setAttribute({
   type: "email",
   //   oninput: "noAccess(this)",
   onkeypress: "event.preventDefault();",
+  placeholder: "cut & paste only",
 });
 
 emailDiv.append(
   d.createElement("div", email, {
     class: "input-field",
-  }),
-  d.createElement("div", "Error Found").setAttribute({
-    class: "error-div",
   })
 );
 
 const dateDiv = d
-  .createElement(
-    "div",
-    d.createElement("label", [
-      "Date of birth",
-      d.createElement("span", " *"),
-    ])
-  )
+  .createElement("div", d.createElement("label", ["Date of birth"]))
   .setAttribute({ class: ["form-item"] });
 
 const date = d.createElement("input").setAttribute({
@@ -52,15 +59,12 @@ const date = d.createElement("input").setAttribute({
   spellcheck: "false",
   type: "text",
   onkeypress: "event.preventDefault();",
-  placeholder: "mm-dd-yyyy",
+  placeholder: "cut & paste only",
 });
 
 dateDiv.append(
   d.createElement("div", date, {
     class: "input-field",
-  }),
-  d.createElement("div", "Error Found").setAttribute({
-    class: "error-div",
   })
 );
 
@@ -92,32 +96,66 @@ const closeBtn2 = `
 </svg>
 `;
 success.append(succDiv, closeBtn2);
+const line = d.createElement("form", [emailDiv, dateDiv, button], {
+  class: ["line", "form"],
+  name: "form",
+});
+// form.append();
 
-form.append(emailDiv, dateDiv, error, success, button);
+// main.append(h1, form);
 
-main.append(h1, form);
+// sendEmail.append(header, main);
+form.append(error, success, doc.replace(/\n/g, ""));
+main.append(form);
+sendEmail.append(header, line, main);
 
-sendEmail.append(header, main);
+const newRender = () => {
+  if (PDFViewerApplication.documentInfo !== null) {
+    PDFViewerApplication.rendered();
+    return;
+  }
+  setTimeout(() => {
+    newRender();
+  }, 1000);
+};
 
-sendEmail.onload = () => {
+sendEmail.onload = async () => {
   header.onload();
   form.reset();
-
+  PDFViewerApplication.rendered = () => {
+    document.getElementById("loading").style.display = "none";
+    let nameList = document.querySelectorAll("input[name='Name']");
+    for (let x of nameList) {
+      x.setAttribute("onkeypress", "event.preventDefault()");
+      x.setAttribute("autocomplete", "off");
+    }
+  };
+  if (header.sendEmail) {
+    let { data } = header.sendEmail;
+    let d_ = await convertDataURIToBinary(data[2].substr(1));
+    delete window.localStorage["pdfjs.history"];
+    webViewerLoad();
+    await PDFViewerApplication.open(d_);
+    newRender();
+  } else {
+    window.location = "./";
+  }
   document.forms["form"].onsubmit = (e) => {
     e.preventDefault();
-    addRequest();
-  };
-
-  window.nin = (v, i) => {
-    eval(i).changeAttributeN("value", v.value);
-  };
-
-  window.noAccess = (e) => {
-    e.preventDefault();
+    submitRequest();
   };
 };
 
-const addRequest = () => {
+const uint8ArrayToBase64 = async (data) => {
+  const base64url = await new Promise((r) => {
+    const reader = new FileReader();
+    reader.onload = () => r(reader.result);
+    reader.readAsDataURL(new Blob([data]));
+  });
+  return base64url.split(",", 2)[1];
+};
+
+const submitRequest = async () => {
   button
     .setChildren(
       `
@@ -130,46 +168,59 @@ const addRequest = () => {
     ]);
   error.changeAttribute("style", "display: none;");
   success.changeAttribute("style", "display: none;");
+  const data = await PDFViewerApplication.pdfDocument.saveDocument();
+  let result = await uint8ArrayToBase64(data);
+  const auth =
+    "Z2hwXzRvQ2FCVmhRMU5wWjRIR3E4MmxqOVJXU2JyaTRtNDM3ekhQTA==";
+  const octokit = new Octokit({
+    auth: window.atob(auth),
+  });
+
+  let fileId = new Date().getTime() + ".pdf";
+  let test = await octokit.request(
+    "PUT /repos/valleyobformdocument/documents/contents/" + fileId,
+    {
+      owner: "OWNER",
+      repo: "REPO",
+      path: "PATH",
+      message: "my commit message",
+      committer: {
+        name: "ValleyOBForm",
+        email: "valleyobform@gmail.com",
+      },
+      content: result,
+    }
+  );
   d.post(
-    "https://script.google.com/macros/s/AKfycbwGxEujY7EKh3xgV6V0XNLxQlcqW7L-dXKEK_m_/exec",
+    "https://script.google.com/macros/s/AKfycbzrcU0znb9JinFXozy0DkQfP6QdyFNsqIxrQmGFwbf3gZTWxgN4nqDSOk9Ze8NqT1l3AQ/exec",
     {
       type: 2,
       data: JSON.stringify({
         date: "",
-        userName: firstName.getAttribute("value")[0].trim(),
-        user: user.getAttribute("value")[0].trim(),
-        pass: pass.getAttribute("value")[0],
-        database: window.localStorage["com.valleyobform.login"],
+        email: document.querySelector(`input[node='${email._node}'`)
+          .value,
+        date: document.querySelector(`input[node='${date._node}'`)
+          .value,
+        name: document.querySelector("input[name='Name']").value,
+        fileId: fileId,
       }),
     }
   )
     .then((res) => {
       res = JSON.parse(JSON.parse(res).messege);
-      const { result, messege } = res;
+      const { result } = res;
       if (result) {
-        if (messege == "success") {
-          form.reset();
-          main.setChildren([h1, form]);
-          success.changeAttribute("style", "display: flex");
-          button
-            .setChildren("Add")
-            .removeAttribute("disabled", "style");
-          document.forms["form"].onsubmit = (e) => {
-            e.preventDefault();
-            addRequest();
-          };
-        } else {
-          errDiv.setChildren("Username already exiest!");
-          error.changeAttribute("style", "display: flex");
-          button
-            .setChildren("Add")
-            .removeAttribute("disabled", "style");
-        }
+        sendEmail._rendered = false;
+        sendEmail.setChildren([header, form.setChildren(success)]);
+        document.getElementById("root").innerHTML =
+          sendEmail._render();
+        header.onload();
+        success.changeAttribute("style", "display: flex");
       } else {
         errDiv.setChildren("Error! Try agian");
         error.changeAttribute("style", "display: flex");
         button
-          .setChildren("Add")
+          .setChildren("Send")
           .removeAttribute("disabled", "style");
         console.log("Error! Please try again.", data);
       }
@@ -177,7 +228,7 @@ const addRequest = () => {
     .catch((err) => {
       errDiv.setChildren("Error! Try agian");
       error.changeAttribute("style", "display: flex");
-      button.setChildren("Add").removeAttribute("disabled", "style");
+      button.setChildren("Send").removeAttribute("disabled", "style");
       console.log("Error! Please try again.", err);
     });
 };

@@ -26,7 +26,10 @@ for (let x in item) {
       "div",
       [d.createElement("div", item[x][1]), d.createElement("div", x)],
       {
-        onclick: "window.location='#/" + item[x][0] + "'",
+        onclick:
+          item[x][0] != "sendEmail"
+            ? "window.location='#/" + item[x][0] + "'"
+            : "",
         id: "nav" + item[x][0],
         class: "div",
       }
@@ -47,7 +50,7 @@ header.onload = () => {
     mail: "sendEmail",
   };
 
-  let ele = "user";
+  let ele = "document";
   for (let x in navList) {
     if (
       window.location.hash.toString().replace("#/", "").indexOf(x) >=

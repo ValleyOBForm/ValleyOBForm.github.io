@@ -1,6 +1,7 @@
 import d from "../../assets/js/NTechDOM.js";
 import { header } from "./header.js";
 import { loading } from "./loading.js";
+import { doc } from "./pdfViewer.js";
 const documentList = d.createElement("div");
 
 const main = d
@@ -95,10 +96,10 @@ documentList.onload = () => {
         dataPrint(data);
         for (let i = 0; i < data.length; i++) {
           document.querySelector(`img[edit="${i}"]`).onclick = () => {
-            header.documentView = {
+            header.sendEmail = {
               data: data[i],
             };
-            window.location = "#/documentView";
+            window.location = "#/sendEmail";
           };
         }
       } else alert("Error! Try again.");

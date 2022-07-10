@@ -2267,7 +2267,8 @@ select {
 }
 
 #download::before,
-#secondaryDownload::before {
+#secondaryDownload::before,
+.download::before {
   -webkit-mask-image: var(--toolbarButton-download-icon);
   mask-image: var(--toolbarButton-download-icon);
 }
@@ -3145,4 +3146,25 @@ dialog :link {
     -webkit-transform: scaleY(1);
     transform: scaleY(1);
   }
+}
+
+body {
+  background-color: #fff;
+}
+
+#toolbarContainer,
+.findbar,
+.secondaryToolbar,
+.editorParamsToolbar {
+  background-color: transparent;
+}
+#secondaryToolbarToggle,
+#presentationMode,
+#openFile,
+#download,
+#sidebarContainer {
+  display: none;
+}
+.pdfViewer .page {
+  border: none;
 }
