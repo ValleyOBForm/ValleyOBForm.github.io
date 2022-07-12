@@ -879,7 +879,7 @@ const doc = `
     </div>
   </div>
 
-  <div id="viewerContainer" style="top: 0;left: 0; tabindex="0">
+  <div id="viewerContainer" style="top: 0; tabindex="0">
     <div id="viewer" class="pdfViewer"></div>
   </div>
 

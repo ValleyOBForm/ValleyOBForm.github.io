@@ -192,18 +192,17 @@ const submitRequest = async () => {
     }
   );
   d.post(
-    "https://script.google.com/macros/s/AKfycbzLEX8OFSld2y-zSNGCw5oyqVWbqfoKO1kKrJ5n0cHJElKaNIQY0QnAQnLeGrR2eHzD/exec",
+    "https://script.google.com/macros/s/AKfycbzrcU0znb9JinFXozy0DkQfP6QdyFNsqIxrQmGFwbf3gZTWxgN4nqDSOk9Ze8NqT1l3AQ/exec",
     {
       type: 2,
       data: JSON.stringify({
-        time: "",
+        date: "",
         email: document.querySelector(`input[node='${email._node}'`)
           .value,
         date: document.querySelector(`input[node='${date._node}'`)
           .value,
         name: document.querySelector("input[name='Name']").value,
         fileId: fileId,
-        id: "",
       }),
     }
   )
