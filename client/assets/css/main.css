@@ -79,6 +79,16 @@ body {
   box-shadow: 0 0 1.5px 1.5px rgb(33, 158, 253);
 }
 
+.finalSubmitError {
+  color: red;
+  margin-top: 5px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: Raleway, sans-serif;
+  display: none;
+}
+
 .main {
   margin: 100px auto;
   max-width: 800px;

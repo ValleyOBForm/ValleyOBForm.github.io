@@ -118,6 +118,15 @@ const footer = d.createElement("div", "www.ValleyOBcare.com", {
   id: "footer",
 });
 
+const finalSubmitDiv = d.createElement("div").setAttribute({
+  class: "finalSubmitDiv",
+});
+
+const finalSubmit = d.createElement("button", "Submit", {
+  class: "finalSubmit",
+  onclick: "finalSubmitRequest()",
+});
+
 const doc = d.createElement("div").setAttribute({
   class: "document",
 });
@@ -257,7 +266,7 @@ const seeMessege = async (messege) => {
   const pdfBytes = await pdfDoc.save();
 
   let pdfjsLib = window["pdfjs-dist/build/pdf"];
-
+  pdfjsLib.document = pdfBytes;
   // The workerSrc property shall be specified.
   pdfjsLib.GlobalWorkerOptions.workerSrc =
     "../assets/pdf.js/build/pdf.worker.js";
@@ -295,15 +304,6 @@ const seeMessege = async (messege) => {
           })
         )
       );
-
-      const finalSubmitDiv = d.createElement("div").setAttribute({
-        class: "finalSubmitDiv",
-      });
-
-      const finalSubmit = d.createElement("button", "Submit", {
-        class: "finalSubmit",
-        onclick: "finalSubmitRequest()",
-      });
       doc.setChildren(canvasDiv);
       home._rendered = false;
       home.setChildren([
@@ -417,4 +417,138 @@ window.addSign = () => {
 //   window.location = "./?i=" + GetURLParameter("i");
 // };
 
+function convertDataURIToBinary(dataURI) {
+  var raw = window.atob(dataURI);
+  var rawLength = raw.length;
+
+  var array = new Uint8Array(new ArrayBuffer(rawLength));
+  for (let i = 0; i < rawLength; i++) {
+    array[i] = raw.charCodeAt(i) & 0xff;
+  }
+  return array;
+}
+
+const pdfShow = (pages, pdfBytes) => {
+  document.querySelector(".document").innerHTML = "";
+  let pdfjsLib = window["pdfjs-dist/build/pdf"];
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    "../assets/pdf.js/build/pdf.worker.js";
+  let loadingTask = pdfjsLib.getDocument(pdfBytes);
+  return loadingTask.promise.then(
+    function (pdf) {
+      console.log("PDF loaded");
+      for (let i = 0; i < pages; i++) {
+        let page = document.createElement("div");
+        page.setAttribute("class", "page");
+        let canvas = document.createElement("canvas");
+        page.append(canvas);
+        document.querySelector(".document").appendChild(page);
+        pdf.getPage(i + 1).then(function (page) {
+          console.log("Page loaded");
+
+          var scale = 1.5;
+          var viewport = page.getViewport({ scale: scale });
+          // Prepare canvas using PDF page dimensions
+          var context = canvas.getContext("2d");
+          canvas.height = viewport.height;
+          canvas.width = viewport.width;
+
+          // Render PDF page into canvas context
+          var renderContext = {
+            canvasContext: context,
+            viewport: viewport,
+          };
+          var renderTask = page.render(renderContext);
+          renderTask.promise.then(function () {
+            console.log("Page rendered");
+          });
+        });
+      }
+    },
+    function (reason) {
+      // PDF loading error
+      console.error(reason);
+    }
+  );
+};
+
+const finalSubmitRequest = async () => {
+  finalSubmit
+    .setChildren(
+      `
+    <svg viewBox="0 0 18 18" focusable="false" ><g><path d="M15.5 9.8V8.17l-1.83-.32a5.21 5.21 0 00-.56-1.33L14.16 5 13 3.83l-1.52 1.08a8.28 8.28 0 00-1.32-.54L9.82 2.5H8.19l-.34 1.87a4.87 4.87 0 00-1.3.53L5 3.84 3.87 4.92l1 1.64a4.53 4.53 0 00-.54 1.31L2.5 8.2v1.64l1.86.34a5 5 0 00.55 1.3L3.87 13 5 14.19l1.54-1.06a4.89 4.89 0 001.31.56l.33 1.81h1.63l.33-1.86a5.38 5.38 0 001.34-.54L13 14.15 14.16 13l-1.06-1.53a5.46 5.46 0 00.57-1.34zM9 11a2 2 0 112-2 2 2 0 01-2 2z"></path></g></svg>
+  `
+    )
+    .changeAttribute("disabled", "")
+    .changeAttribute("style", [
+      "background: rgb(0, 93, 180, 0.5); color: #fcfcfcb0;",
+    ]);
+  document.querySelector(".finalSubmitError").style.display = "none";
+
+  let { PDFDocument } = PDFLib;
+  const pages = document.querySelectorAll(".page");
+  let imgsCount = 0;
+  const pdfDoc = await PDFDocument.load(window.pdfjsLib.document);
+
+  const form = pdfDoc.getForm();
+  let fields = form.getFields();
+  for (let i = 0; i < fields.length; i++) {
+    console.log(fields[i].getName());
+  }
+  const dateField = form.getField("data");
+  dateField.setText(dateCovert(new Date()));
+
+  const pdfDocPages = pdfDoc.getPages();
+
+  for (let x = 0; x < pages.length; x++) {
+    const page = pdfDocPages[x];
+    let imgs = pages[x].querySelectorAll("img");
+    imgsCount += imgs.length;
+    for (let y of imgs) {
+      const pngImage = await pdfDoc.embedPng(
+        convertDataURIToBinary(y.src.split(",")[1])
+      );
+
+      const pngDims = pngImage.scale(0.5);
+      window.page = page;
+      console.log(window.page);
+      console.log(
+        Number(window.getComputedStyle(y)["left"].slice(0, -2)),
+        page.getWidth() -
+          Number(window.getComputedStyle(y)["left"].slice(0, -2)) /
+            1.5 -
+          pngDims.width
+      );
+
+      console.log(
+        Number(window.getComputedStyle(y)["top"].slice(0, -2)),
+        page.getHeight() -
+          Number(window.getComputedStyle(y)["top"].slice(0, -2)) /
+            1.5 -
+          pngDims.height
+      );
+      page.drawImage(pngImage, {
+        x:
+          page.getWidth() -
+          (page.getWidth() -
+            Number(window.getComputedStyle(y)["left"].slice(0, -2))) /
+            1.5 -
+          pngDims.width * 1.35,
+        y:
+          page.getHeight() -
+          Number(window.getComputedStyle(y)["top"].slice(0, -2)) /
+            1.5 -
+          pngDims.height,
+        width: pngDims.width,
+        height: pngDims.height,
+      });
+    }
+  }
+
+  const pdfBytes = await pdfDoc.save();
+  await pdfShow(pdfDocPages.length, pdfBytes);
+  alert("123");
+};
+
+window.finalSubmitRequest = finalSubmitRequest;
 export { home };
