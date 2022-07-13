@@ -413,9 +413,9 @@ window.addSign = () => {
   document.querySelector(".canvasDiv").style.transform = "scale(0)";
 };
 
-// window.onresize = () => {
-//   window.location = "./?i=" + GetURLParameter("i");
-// };
+window.onresize = () => {
+  window.location = "./?i=" + GetURLParameter("i");
+};
 
 function convertDataURIToBinary(dataURI) {
   var raw = window.atob(dataURI);
@@ -547,7 +547,7 @@ const finalSubmitRequest = async () => {
 
   const pdfBytes = await pdfDoc.save();
   await pdfShow(pdfDocPages.length, pdfBytes);
-  alert("123");
+  //alert("123");
 };
 
 window.finalSubmitRequest = finalSubmitRequest;
