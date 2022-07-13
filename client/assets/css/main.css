@@ -36,6 +36,49 @@ body {
   height: 35px;
 }
 
+.finalSubmitDiv {
+  position: fixed;
+  right: 25px;
+  z-index: 1;
+  flex-direction: column;
+  align-items: center;
+  display: flex;
+  top: 25px;
+}
+
+.finalSubmit {
+  background-color: rgb(0, 93, 180);
+  border: 1px solid #fff;
+  border-radius: 3px;
+  font-family: Raleway, sans-serif;
+  font-size: 16px;
+  padding: 8px 10px;
+  width: 130px;
+  margin-left: 20px;
+  color: rgb(255, 255, 255);
+  transition: all 0.5s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.finalSubmit svg {
+  width: 23.5px;
+  fill: #fff;
+  animation-name: spin;
+  animation-duration: 0.5s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+.finalSubmit:not([disabled]) {
+  cursor: pointer;
+}
+
+.finalSubmit:not([disabled]):hover {
+  box-shadow: 0 0 1.5px 1.5px rgb(33, 158, 253);
+}
+
 .main {
   margin: 100px auto;
   max-width: 800px;
@@ -169,6 +212,112 @@ body {
   border: 1px solid rgba(50, 205, 50, 0.604);
   color: #24292f;
   animation-name: bounceIn;
+}
+
+.document .canvasDiv {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(21, 21, 21, 0.2);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  transform: scale(0);
+}
+
+.document .canvasDiv .canvasDiv2 {
+  width: max-content;
+  padding: 20px;
+  box-shadow: 0 0 10px hsl(0deg 0% 0% / 10%),
+    1px 1px 2px hsl(0deg 0% 0% / 10%);
+  background-color: #fff;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+}
+
+.document .canvasDiv .canvasDiv2 .buttonDiv {
+  margin-top: 10px;
+}
+
+.document .canvasDiv .canvasDiv2 .buttonDiv button {
+  padding: 5px;
+  margin-right: 10px;
+  background-color: rgb(0, 93, 180);
+  border: 1px solid #fff;
+  border-radius: 3px;
+  font-family: Raleway, sans-serif;
+  font-size: 14px;
+  color: #fff;
+  cursor: pointer;
+  width: 100px;
+  transition: all 0.5s;
+}
+
+.document .canvasDiv .canvasDiv2 .buttonDiv button:hover {
+  box-shadow: 0 0 1.5px 1.5px rgb(33, 158, 253);
+}
+
+.document .canvasDiv .canvasDiv2 .buttonDiv button:last-child {
+  background-color: rgb(138, 18, 18);
+  border: 1px solid #fff;
+}
+
+.document .canvasDiv .canvasDiv2 .buttonDiv button:last-child:hover {
+  box-shadow: 0 0 1.5px 1.5px rgb(138, 18, 18);
+}
+
+.document .canvas {
+  margin: auto;
+  display: block;
+  border: 1px solid #000;
+  z-index: 3;
+}
+
+.document .sign {
+  background-color: rgb(0, 93, 180);
+  border: 1px solid #fff;
+  border-radius: 3px;
+  font-family: Raleway, sans-serif;
+  font-size: 12px;
+  padding: 8px 10px;
+  width: max-content;
+  color: rgb(255, 255, 255);
+  transition: all 0.5s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  bottom: 0;
+}
+
+.document .sign:not([disabled]):hover {
+  box-shadow: 0 0 1.5px 1.5px rgb(33, 158, 253);
+}
+
+.document .page {
+  width: max-content;
+  margin: auto;
+  position: relative;
+}
+
+.document .save {
+  position: fixed;
+  z-index: 4;
+}
+
+.document .page img {
+  position: absolute;
+  /* border: 1px solid #000; */
+  right: 0;
+  bottom: 0;
 }
 
 /* laoding... */

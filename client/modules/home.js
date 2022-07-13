@@ -1,6 +1,5 @@
 import d from "../../assets/js/NTechDOM.js";
-import { Octokit } from "https://cdn.skypack.dev/@octokit/core";
-import { doc } from "./pdfViewer.js";
+import { loading } from "./loading.js";
 import { logo } from "./icons.js";
 const header = d.createElement("header").setAttribute({
   class: "header",
@@ -114,14 +113,15 @@ const submit = d.createElement("button", "Submit", {
 form.append(title, date, err, submit);
 
 main.append(form);
+const footer = d.createElement("div", "www.ValleyOBcare.com", {
+  style: "text-align: center; margin-top: 150px",
+  id: "footer",
+});
 
-home.append(
-  header,
-  main,
-  d.createElement("div", "www.ValleyOBcare.com", {
-    style: "text-align: center; margin-top: 150px",
-  })
-);
+const doc = d.createElement("div").setAttribute({
+  class: "document",
+});
+home.append(header, main, doc, footer);
 
 home.onload = async () => {
   document.forms["form"].onsubmit = (e) => {
@@ -206,7 +206,7 @@ const submitRequest = () => {
           document.querySelector("#error-field").innerHTML =
             "Date of birth isn't correct.";
         } else {
-          console.log(messege);
+          seeMessege(messege);
         }
       }
     })
@@ -219,5 +219,202 @@ const submitRequest = () => {
         "Error found! Please try again.";
     });
 };
+
+const dateCovert = (date) => {
+  date = new Date(date);
+  return (
+    String(date.getMonth() + 1).padStart(2, "0") +
+    "/" +
+    String(date.getDate()).padStart(2, "0") +
+    "/" +
+    date.getFullYear()
+  );
+};
+
+let { PDFDocument } = PDFLib;
+
+const seeMessege = async (messege) => {
+  document.querySelector("#footer").remove();
+  main.setChildren(loading);
+
+  const url =
+    "https://raw.githubusercontent.com/valleyobformdocument/documents/main/" +
+    messege;
+  const existingPdfBytes = await fetch(url).then((res) =>
+    res.arrayBuffer()
+  );
+
+  const pdfDoc = await PDFDocument.load(existingPdfBytes);
+
+  const form = pdfDoc.getForm();
+  let fields = form.getFields();
+  for (let i = 0; i < fields.length; i++) {
+    console.log(fields[i].getName());
+  }
+  const dateField = form.getField("data");
+  dateField.setText(dateCovert(new Date()));
+  const pages = pdfDoc.getPages();
+  const pdfBytes = await pdfDoc.save();
+
+  let pdfjsLib = window["pdfjs-dist/build/pdf"];
+
+  // The workerSrc property shall be specified.
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    "../assets/pdf.js/build/pdf.worker.js";
+
+  let loadingTask = pdfjsLib.getDocument(pdfBytes);
+  loadingTask.promise.then(
+    function (pdf) {
+      console.log("PDF loaded");
+      const canvasDiv = d.createElement("div").setAttribute({
+        class: "canvasDiv",
+      });
+
+      const canvasDiv2 = d.createElement("div").setAttribute({
+        class: "canvasDiv2",
+      });
+      const canvas = d.createElement("canvas").setAttribute({
+        width: "300px",
+        height: "100px",
+        id: "canvas",
+        class: "canvas",
+      });
+
+      const addBtn = d.createElement("button", "Add", {
+        onclick: "addSign()",
+      });
+      const cancleBtn = d.createElement("button", "Cancle", {
+        onclick: "cancleSign()",
+      });
+
+      canvasDiv.append(
+        canvasDiv2.append(
+          canvas,
+          d.createElement("div", [addBtn, cancleBtn], {
+            class: "buttonDiv",
+          })
+        )
+      );
+
+      const finalSubmitDiv = d.createElement("div").setAttribute({
+        class: "finalSubmitDiv",
+      });
+
+      const finalSubmit = d.createElement("button", "Submit", {
+        class: "finalSubmit",
+        onclick: "finalSubmitRequest()",
+      });
+      doc.setChildren(canvasDiv);
+      home._rendered = false;
+      home.setChildren([
+        header,
+        finalSubmitDiv.append(
+          finalSubmit,
+          d.createElement("d").setAttribute({
+            class: "finalSubmitError",
+          })
+        ),
+        ,
+        doc,
+      ]);
+      document.getElementById("root").innerHTML = home._render();
+
+      for (let i = 0; i < pages.length; i++) {
+        let page = document.createElement("div");
+        page.setAttribute("class", "page");
+        let canvas = document.createElement("canvas");
+        let sign = document.createElement("div");
+        sign.setAttribute("class", "sign");
+        sign.setAttribute("onclick", `signShow(${i})`);
+        sign.innerHTML = "Add sign";
+        page.append(canvas, sign);
+        document.querySelector(".document").appendChild(page);
+        pdf.getPage(i + 1).then(function (page) {
+          console.log("Page loaded");
+
+          var scale = 1.5;
+          var viewport = page.getViewport({ scale: scale });
+
+          // Prepare canvas using PDF page dimensions
+          var context = canvas.getContext("2d");
+          canvas.height = viewport.height;
+          canvas.width = viewport.width;
+
+          // Render PDF page into canvas context
+          var renderContext = {
+            canvasContext: context,
+            viewport: viewport,
+          };
+          var renderTask = page.render(renderContext);
+          renderTask.promise.then(function () {
+            console.log("Page rendered");
+          });
+        });
+      }
+    },
+    function (reason) {
+      // PDF loading error
+      console.error(reason);
+    }
+  );
+};
+
+const signShow = async (i) => {
+  const canvas = document.querySelector("#canvas");
+  const signaturePad = new SignaturePad(canvas, {
+    minWidth: 1,
+    maxWidth: 1,
+    penColor: "rgb(21, 21, 21)",
+  });
+  document.querySelector(".canvasDiv").style.transform = "scale(1)";
+  window.pageNo = i;
+  window.signaturePad = signaturePad;
+};
+
+window.signShow = signShow;
+
+window.cancleSign = () => {
+  document.querySelector(".canvasDiv").style.transform = "scale(0)";
+};
+
+window.addSign = () => {
+  const page = document.querySelectorAll(".page")[pageNo];
+  let data = signaturePad.toDataURL("image/png");
+  let img = document.createElement("img");
+  img.src = data;
+  img.height = "75";
+
+  window.init = (e) => {
+    // img.addEventListener("mousemove", setPosition);
+    img.addEventListener("dragover", setPosition);
+    img.style.top = e.pageY - 50 + "px";
+    img.style.left = e.pageX - 300 + "px";
+  };
+  window.setPosition = (e) => {
+    let h = 0;
+    if (pageNo) {
+      for (let i = 0; i <= pageNo - 1; i++) {
+        h += Number(
+          getComputedStyle(document.querySelectorAll(".page")[i])[
+            "height"
+          ].slice(0, -2)
+        );
+      }
+    }
+    console.log(h);
+    img.style.top = e.pageY - 50 - h + "px";
+    img.style.left = e.pageX - 300 + "px";
+  };
+
+  img.addEventListener("dragstart", setPosition);
+  img.addEventListener("dragover", setPosition);
+  page.appendChild(img);
+
+  document.querySelector(".canvasDiv").style.transform = "scale(0)";
+};
+
+// window.onresize = () => {
+//   window.location = "./?i=" + GetURLParameter("i");
+// };
 
 export { home };

