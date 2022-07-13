@@ -130,6 +130,14 @@ const finalSubmit = d.createElement("button", "Submit", {
 const doc = d.createElement("div").setAttribute({
   class: "document",
 });
+
+const thanks = d.createElement(
+  "div",
+  "Successfully submitted signature. Thank you!",
+  {
+    class: "thanks",
+  }
+);
 home.append(header, main, doc, footer);
 
 home.onload = async () => {
@@ -472,6 +480,16 @@ const pdfShow = (pages, pdfBytes) => {
   );
 };
 
+const uint8ArrayToBase64 = async (data) => {
+  const base64url = await new Promise((r) => {
+    const reader = new FileReader();
+    reader.onload = () => r(reader.result);
+    reader.readAsDataURL(new Blob([data]));
+  });
+  return base64url;
+};
+
+let imgsCount = 0;
 const finalSubmitRequest = async () => {
   finalSubmit
     .setChildren(
@@ -487,7 +505,6 @@ const finalSubmitRequest = async () => {
 
   let { PDFDocument } = PDFLib;
   const pages = document.querySelectorAll(".page");
-  let imgsCount = 0;
   const pdfDoc = await PDFDocument.load(window.pdfjsLib.document);
 
   const form = pdfDoc.getForm();
@@ -510,23 +527,7 @@ const finalSubmitRequest = async () => {
       );
 
       const pngDims = pngImage.scale(0.5);
-      window.page = page;
-      console.log(window.page);
-      console.log(
-        Number(window.getComputedStyle(y)["left"].slice(0, -2)),
-        page.getWidth() -
-          Number(window.getComputedStyle(y)["left"].slice(0, -2)) /
-            1.5 -
-          pngDims.width
-      );
 
-      console.log(
-        Number(window.getComputedStyle(y)["top"].slice(0, -2)),
-        page.getHeight() -
-          Number(window.getComputedStyle(y)["top"].slice(0, -2)) /
-            1.5 -
-          pngDims.height
-      );
       page.drawImage(pngImage, {
         x:
           page.getWidth() -
@@ -546,8 +547,48 @@ const finalSubmitRequest = async () => {
   }
 
   const pdfBytes = await pdfDoc.save();
-  await pdfShow(pdfDocPages.length, pdfBytes);
-  //alert("123");
+  window.pdfjsLib.document = pdfBytes;
+
+  if (imgsCount == 0) {
+    finalSubmit
+      .setChildren("Submit")
+      .removeAttribute("disabled", "style");
+    document.querySelector(".finalSubmitError").style.display =
+      "block";
+    document.querySelector(".finalSubmitError").innerHTML =
+      "Signature required!";
+  } else {
+    await pdfShow(pdfDocPages.length, pdfBytes);
+    let pdfData = await uint8ArrayToBase64(pdfBytes);
+    d.post(
+      "https://script.google.com/macros/s/AKfycby_Ej5m-zMH0j92eXMhsoqpv83xcAjm3zvWVYkkzor5XX8uBpzxL6VVB-e_FJZAvBLq/exec",
+      {
+        type: 1,
+        data: JSON.stringify({
+          data: pdfData,
+          id: GetURLParameter("i"),
+        }),
+      }
+    )
+      .then((res) => {
+        res = JSON.parse(JSON.parse(res).messege);
+        const { result } = res;
+        if (result) {
+          home._rendered = false;
+          home.setChildren([header, thanks, footer]);
+          document.getElementById("root").innerHTML = home._render();
+        }
+      })
+      .catch((err) => {
+        finalSubmit
+          .setChildren("Submit")
+          .removeAttribute("disabled", "style");
+        document.querySelector(".finalSubmitError").style.display =
+          "block";
+        document.querySelector(".finalSubmitError").innerHTML =
+          "Error found! Please try again.";
+      });
+  }
 };
 
 window.finalSubmitRequest = finalSubmitRequest;
