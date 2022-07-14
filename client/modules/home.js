@@ -390,40 +390,77 @@ window.addSign = () => {
   let data = signaturePad.toDataURL("image/png");
   let img = document.createElement("img");
   img.src = data;
+  img.draggable = false;
   img.height = "75";
-
-  window.init = (e) => {
-    // img.addEventListener("mousemove", setPosition);
-    img.addEventListener("dragover", setPosition);
-    img.style.top = e.pageY - 50 + "px";
-    img.style.left = e.pageX - 300 + "px";
-  };
   window.setPosition = (e) => {
-    let h = 0;
-    if (pageNo) {
-      for (let i = 0; i <= pageNo - 1; i++) {
-        h += Number(
-          getComputedStyle(document.querySelectorAll(".page")[i])[
-            "height"
-          ].slice(0, -2)
-        );
-      }
-    }
-    console.log(h);
-    img.style.top = e.pageY - 50 - h + "px";
-    img.style.left = e.pageX - 300 + "px";
-  };
+    // let point = document.createElement("div");
+    // point.setAttribute(
+    //   "style",
+    //   `width: 5px; height: 5px; position: absolute; top: ${e.offsetY}px;left: ${e.offsetX}px;background: red;`
+    // );
+    // document.querySelectorAll(".page")[pageNo].append(point);
+    // console.log(e);
 
-  img.addEventListener("dragstart", setPosition);
-  img.addEventListener("dragover", setPosition);
+    img.style.top = e.offsetY - 75 / 2 + "px";
+    img.style.left = e.offsetX - 150 / 2 + "px";
+  };
+  // img.addEventListener("mousedown", () => {
+  //   img.style.border = "1px solid red";
+  //   page.addEventListener("mousemove", setPosition);
+  //   page.addEventListener("mouseup", () => {
+  //     img.style.border = "none";
+  //     page.removeEventListener("mousemove", setPosition);
+  //   });
+  //   img.addEventListener("mouseup", () => {
+  //     img.style.border = "none";
+  //     page.removeEventListener("mousemove", setPosition);
+  //   });
+  // });
+
+  img.addEventListener("click", (e) => {
+    img.style.border = "1px solid red";
+    let newPage = document.createElement("div");
+    newPage.setAttribute(
+      "style",
+      "position: absolute; top: 0;left: 0;right: 0;bottom:0;background: rgba(256, 256, 256, 0.4)"
+    );
+    page.appendChild(newPage);
+    let moveable = false;
+    newPage.addEventListener("mousedown", (e) => {
+      if (e.buttons === 1) {
+        moveable = true;
+        //setPosition(e);
+      }
+
+      newPage.addEventListener("mousemove", (e) => {
+        if (moveable && e.altKey) {
+          setPosition(e);
+        } else {
+          img.style.border = "none";
+          newPage.remove();
+        }
+      });
+
+      // newPage.addEventListener("mouseup", (e) => {
+      //   //alert(123);
+      //   if (moveable) {
+      //     moveable = false;
+      //     setPosition(e);
+      //     img.style.border = "none";
+      //     newPage.remove();
+      //   }
+      // });
+    });
+  });
+
   page.appendChild(img);
 
   document.querySelector(".canvasDiv").style.transform = "scale(0)";
 };
 
-window.onresize = () => {
-  window.location = "./?i=" + GetURLParameter("i");
-};
+// window.onresize = () => {
+//   window.location = "./?i=" + GetURLParameter("i");
+// };
 
 function convertDataURIToBinary(dataURI) {
   var raw = window.atob(dataURI);
