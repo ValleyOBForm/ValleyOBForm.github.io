@@ -139,10 +139,11 @@ sendEmail.onload = async () => {
     newRender();
   } else {
     window.location = "./";
+    return;
   }
   document.forms["form"].onsubmit = (e) => {
     e.preventDefault();
-    submitRequest();
+    submitRequest(data[1].substr(1));
   };
 };
 

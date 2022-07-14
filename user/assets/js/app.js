@@ -3,6 +3,7 @@ import { login } from "../../modules/login.js";
 import { pages } from "./pages.js";
 import { documentList } from "../../modules/documentList.js";
 import { sendEmail } from "../../modules/sendEmail.js";
+import { inbox } from "../../modules/inbox.js";
 console.log("version " + d.version);
 console.log("Developer : " + d.meta.developer.name);
 console.log("Developer Profile : " + d.meta.developer.profile);
