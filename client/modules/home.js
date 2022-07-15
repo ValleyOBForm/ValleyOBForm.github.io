@@ -343,7 +343,7 @@ const seeMessege = async (messege) => {
       );
       doc.setChildren(canvasDiv);
       home._rendered = false;
-      if (window["ontouchstart"]) {
+      if (window["ontouchstart"] == null) {
         home.setChildren([
           header,
           finalSubmitDiv.append(
@@ -438,6 +438,7 @@ window.addSign = () => {
   img.draggable = false;
   img.height = "75";
   window.setPosition = (e) => {
+    console.log(e);
     img.style.top = e.offsetY - 75 / 2 + "px";
     img.style.left = e.offsetX - 150 / 2 + "px";
   };
@@ -450,6 +451,16 @@ window.addSign = () => {
       "position: absolute; top: 0;left: 0;right: 0;bottom:0;background: rgba(256, 256, 256, 0.4);z-index: 5"
     );
     page.appendChild(newPage);
+    if (window.ontouchstart == null) {
+      newPage.addEventListener("touchstart", () => {
+        newPage.addEventListener("touchmove", setPosition);
+        newPage.addEventListener("touchend", () => {
+          img.style.border = "none";
+          newPage.remove();
+        });
+      });
+      return;
+    }
     let moveable = false;
     newPage.addEventListener("mousedown", (e) => {
       if (e.buttons === 1) {
@@ -464,13 +475,6 @@ window.addSign = () => {
           img.style.border = "none";
           newPage.remove();
         }
-      });
-    });
-    newPage.addEventListener("touchstart", () => {
-      newPage.addEventListener("touchmove", setPosition);
-      newPage.addEventListener("touchend", () => {
-        img.style.border = "none";
-        newPage.remove();
       });
     });
   });
