@@ -343,7 +343,7 @@ const seeMessege = async (messege) => {
       );
       doc.setChildren(canvasDiv);
       home._rendered = false;
-      if (window["touchstart"]) {
+      if (window["ontouchstart"]) {
         home.setChildren([
           header,
           finalSubmitDiv.append(
@@ -442,7 +442,7 @@ window.addSign = () => {
     img.style.left = e.offsetX - 150 / 2 + "px";
   };
 
-  if (window["touchstart"]) {
+  if (window["ontouchstart"]) {
     img.addEventListener("touchstart", () => {
       img.addEventListener("touchmove", setPosition);
       img.addEventListener("touchend", () => {
