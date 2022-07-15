@@ -330,6 +330,27 @@ body {
   bottom: 0;
 }
 
+.attentionDiv {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.attention {
+  font-size: 16px;
+  font-family: "Open Sans Condensed", Helvetica, sans-serif;
+  font-weight: 700;
+  padding: 10px;
+  background-color: #cae8ca;
+  border: 2px solid #4caf50;
+  text-align: center;
+  width: max-content;
+}
+
 .thanks {
   width: max-content;
   font-size: 24px;

@@ -138,6 +138,20 @@ const thanks = d.createElement(
     class: "thanks",
   }
 );
+
+const attention = d.createElement(
+  "div",
+  d.createElement(
+    "div",
+    "For signeture movement, please click signeture and then alt + mouse move.",
+    {
+      class: "attention",
+    }
+  ),
+  {
+    class: "attentionDiv",
+  }
+);
 home.append(header, main, doc, footer);
 
 home.onload = async () => {
@@ -222,6 +236,14 @@ const submitRequest = () => {
             "block";
           document.querySelector("#error-field").innerHTML =
             "Date of birth isn't correct.";
+        } else if (messege == "used") {
+          submit
+            .setChildren("Submit")
+            .removeAttribute("disabled", "style");
+          document.querySelector("#error-field").style.display =
+            "block";
+          document.querySelector("#error-field").innerHTML =
+            "Signeture already submitted!";
         } else {
           seeMessege(messege);
         }
@@ -272,6 +294,13 @@ const seeMessege = async (messege) => {
   dateField.setText(dateCovert(new Date()));
   const pages = pdfDoc.getPages();
   const pdfBytes = await pdfDoc.save();
+  let maxWidth = 0;
+  for (let x of pages) {
+    if (maxWidth < x.getWidth()) {
+      maxWidth = x.getWidth();
+    }
+  }
+  console.log(window.innerWidth / maxWidth);
 
   let pdfjsLib = window["pdfjs-dist/build/pdf"];
   pdfjsLib.document = pdfBytes;
@@ -314,17 +343,33 @@ const seeMessege = async (messege) => {
       );
       doc.setChildren(canvasDiv);
       home._rendered = false;
-      home.setChildren([
-        header,
-        finalSubmitDiv.append(
-          finalSubmit,
-          d.createElement("d").setAttribute({
-            class: "finalSubmitError",
-          })
-        ),
-        ,
-        doc,
-      ]);
+      if (window["touchstart"]) {
+        home.setChildren([
+          header,
+          finalSubmitDiv.append(
+            finalSubmit,
+            d.createElement("d").setAttribute({
+              class: "finalSubmitError",
+            })
+          ),
+          ,
+          doc,
+        ]);
+      } else {
+        home.setChildren([
+          header,
+          finalSubmitDiv.append(
+            finalSubmit,
+            d.createElement("d").setAttribute({
+              class: "finalSubmitError",
+            })
+          ),
+          ,
+          doc,
+          attention,
+        ]);
+      }
+
       document.getElementById("root").innerHTML = home._render();
 
       for (let i = 0; i < pages.length; i++) {
@@ -340,9 +385,9 @@ const seeMessege = async (messege) => {
         pdf.getPage(i + 1).then(function (page) {
           console.log("Page loaded");
 
-          var scale = 1.5;
+          let scale = 1.5;
           var viewport = page.getViewport({ scale: scale });
-
+          pdfjsLib.scaleSize = scale;
           // Prepare canvas using PDF page dimensions
           var context = canvas.getContext("2d");
           canvas.height = viewport.height;
@@ -393,66 +438,44 @@ window.addSign = () => {
   img.draggable = false;
   img.height = "75";
   window.setPosition = (e) => {
-    // let point = document.createElement("div");
-    // point.setAttribute(
-    //   "style",
-    //   `width: 5px; height: 5px; position: absolute; top: ${e.offsetY}px;left: ${e.offsetX}px;background: red;`
-    // );
-    // document.querySelectorAll(".page")[pageNo].append(point);
-    // console.log(e);
-
     img.style.top = e.offsetY - 75 / 2 + "px";
     img.style.left = e.offsetX - 150 / 2 + "px";
   };
-  // img.addEventListener("mousedown", () => {
-  //   img.style.border = "1px solid red";
-  //   page.addEventListener("mousemove", setPosition);
-  //   page.addEventListener("mouseup", () => {
-  //     img.style.border = "none";
-  //     page.removeEventListener("mousemove", setPosition);
-  //   });
-  //   img.addEventListener("mouseup", () => {
-  //     img.style.border = "none";
-  //     page.removeEventListener("mousemove", setPosition);
-  //   });
-  // });
 
-  img.addEventListener("click", (e) => {
-    img.style.border = "1px solid red";
-    let newPage = document.createElement("div");
-    newPage.setAttribute(
-      "style",
-      "position: absolute; top: 0;left: 0;right: 0;bottom:0;background: rgba(256, 256, 256, 0.4)"
-    );
-    page.appendChild(newPage);
-    let moveable = false;
-    newPage.addEventListener("mousedown", (e) => {
-      if (e.buttons === 1) {
-        moveable = true;
-        //setPosition(e);
-      }
-
-      newPage.addEventListener("mousemove", (e) => {
-        if (moveable && e.altKey) {
-          setPosition(e);
-        } else {
-          img.style.border = "none";
-          newPage.remove();
-        }
+  if (window["touchstart"]) {
+    img.addEventListener("touchstart", () => {
+      img.addEventListener("touchmove", setPosition);
+      img.addEventListener("touchend", () => {
+        img.removeEventListener("touchmove", setPosition);
       });
-
-      // newPage.addEventListener("mouseup", (e) => {
-      //   //alert(123);
-      //   if (moveable) {
-      //     moveable = false;
-      //     setPosition(e);
-      //     img.style.border = "none";
-      //     newPage.remove();
-      //   }
-      // });
     });
-  });
+  } else {
+    img.addEventListener("click", (e) => {
+      img.style.border = "1px solid lime";
+      let newPage = document.createElement("div");
+      newPage.setAttribute(
+        "style",
+        "position: absolute; top: 0;left: 0;right: 0;bottom:0;background: rgba(256, 256, 256, 0.4);z-index: 5"
+      );
+      page.appendChild(newPage);
+      let moveable = false;
+      newPage.addEventListener("mousedown", (e) => {
+        if (e.buttons === 1) {
+          moveable = true;
+          //setPosition(e);
+        }
 
+        newPage.addEventListener("mousemove", (e) => {
+          if (moveable && e.altKey) {
+            setPosition(e);
+          } else {
+            img.style.border = "none";
+            newPage.remove();
+          }
+        });
+      });
+    });
+  }
   page.appendChild(img);
 
   document.querySelector(".canvasDiv").style.transform = "scale(0)";
@@ -539,7 +562,7 @@ const finalSubmitRequest = async () => {
       "background: rgb(0, 93, 180, 0.5); color: #fcfcfcb0;",
     ]);
   document.querySelector(".finalSubmitError").style.display = "none";
-
+  document.querySelector(".attentionDiv").style.display = "none";
   let { PDFDocument } = PDFLib;
   const pages = document.querySelectorAll(".page");
   const pdfDoc = await PDFDocument.load(window.pdfjsLib.document);
@@ -624,6 +647,8 @@ const finalSubmitRequest = async () => {
           "block";
         document.querySelector(".finalSubmitError").innerHTML =
           "Error found! Please try again.";
+        document.querySelector(".attentionDiv").style.display =
+          "flex";
       });
   }
 };
