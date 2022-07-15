@@ -442,40 +442,38 @@ window.addSign = () => {
     img.style.left = e.offsetX - 150 / 2 + "px";
   };
 
-  if (window["ontouchstart"]) {
-    img.addEventListener("touchstart", () => {
-      img.addEventListener("touchmove", setPosition);
-      img.addEventListener("touchend", () => {
-        img.removeEventListener("touchmove", setPosition);
-      });
-    });
-  } else {
-    img.addEventListener("click", (e) => {
-      img.style.border = "1px solid lime";
-      let newPage = document.createElement("div");
-      newPage.setAttribute(
-        "style",
-        "position: absolute; top: 0;left: 0;right: 0;bottom:0;background: rgba(256, 256, 256, 0.4);z-index: 5"
-      );
-      page.appendChild(newPage);
-      let moveable = false;
-      newPage.addEventListener("mousedown", (e) => {
-        if (e.buttons === 1) {
-          moveable = true;
-          //setPosition(e);
-        }
+  img.addEventListener("click", (e) => {
+    img.style.border = "1px solid lime";
+    let newPage = document.createElement("div");
+    newPage.setAttribute(
+      "style",
+      "position: absolute; top: 0;left: 0;right: 0;bottom:0;background: rgba(256, 256, 256, 0.4);z-index: 5"
+    );
+    page.appendChild(newPage);
+    let moveable = false;
+    newPage.addEventListener("mousedown", (e) => {
+      if (e.buttons === 1) {
+        moveable = true;
+        //setPosition(e);
+      }
 
-        newPage.addEventListener("mousemove", (e) => {
-          if (moveable && e.altKey) {
-            setPosition(e);
-          } else {
-            img.style.border = "none";
-            newPage.remove();
-          }
-        });
+      newPage.addEventListener("mousemove", (e) => {
+        if (moveable && e.altKey) {
+          setPosition(e);
+        } else {
+          img.style.border = "none";
+          newPage.remove();
+        }
       });
     });
-  }
+    newPage.addEventListener("touchstart", () => {
+      newPage.addEventListener("touchmove", setPosition);
+      newPage.addEventListener("touchend", () => {
+        img.style.border = "none";
+        newPage.remove();
+      });
+    });
+  });
   page.appendChild(img);
 
   document.querySelector(".canvasDiv").style.transform = "scale(0)";
