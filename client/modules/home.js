@@ -575,7 +575,8 @@ const finalSubmitRequest = async () => {
       "background: rgb(0, 93, 180, 0.5); color: #fcfcfcb0;",
     ]);
   document.querySelector(".finalSubmitError").style.display = "none";
-  document.querySelector(".attentionDiv").style.display = "none";
+  if (document.querySelector(".attentionDiv"))
+    document.querySelector(".attentionDiv").style.display = "none";
   let { PDFDocument } = PDFLib;
   const pages = document.querySelectorAll(".page");
   const pdfDoc = await PDFDocument.load(window.pdfjsLib.document);
@@ -660,8 +661,9 @@ const finalSubmitRequest = async () => {
           "block";
         document.querySelector(".finalSubmitError").innerHTML =
           "Error found! Please try again.";
-        document.querySelector(".attentionDiv").style.display =
-          "flex";
+        if (document.querySelector(".attentionDiv"))
+          document.querySelector(".attentionDiv").style.display =
+            "flex";
       });
   }
 };
