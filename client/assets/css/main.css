@@ -330,6 +330,10 @@ body {
   bottom: 0;
 }
 
+.document {
+  overflow: auto;
+}
+
 .attentionDiv {
   width: 100%;
   position: fixed;

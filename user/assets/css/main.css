@@ -254,6 +254,17 @@ body {
   flex-direction: row;
 }
 
+.iframe .thanks {
+  width: max-content;
+  font-size: 24px;
+  font-family: "Open Sans Condensed", Helvetica, sans-serif;
+  font-weight: 700;
+  padding: 50px;
+  margin: 150px auto;
+  box-shadow: 0 0 10px hsl(0deg 0% 0% / 10%),
+    1px 1px 2px hsl(0deg 0% 0% / 10%);
+}
+
 .main h1 .searchInputDiv {
   display: flex;
   width: 100%;

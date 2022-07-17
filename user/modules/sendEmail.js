@@ -84,18 +84,13 @@ const closeBtn = `
 `;
 error.append(errDiv, closeBtn);
 
-const success = d.createElement("div", "", {
-  class: "success",
-});
-const succDiv = d.createElement("div", "Successfully sent email!", {
-  style: "width: 100%; text-align: left;",
-});
-const closeBtn2 = `
-<svg onclick="closeDiv('.success')" aria-hidden="true" style="fill: rgb(34, 207, 92); cursor: pointer" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-x">
-    <path fill-rule="evenodd" d="M3.72 3.72a.75.75 0 011.06 0L8 6.94l3.22-3.22a.75.75 0 111.06 1.06L9.06 8l3.22 3.22a.75.75 0 11-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 01-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 010-1.06z"></path>
-</svg>
-`;
-success.append(succDiv, closeBtn2);
+const success = d.createElement(
+  "div",
+  "Successfully sent email. Thank you!",
+  {
+    class: "thanks",
+  }
+);
 const line = d.createElement("form", [emailDiv, dateDiv, button], {
   class: ["line", "form"],
   name: "form",
@@ -105,7 +100,7 @@ const line = d.createElement("form", [emailDiv, dateDiv, button], {
 // main.append(h1, form);
 
 // sendEmail.append(header, main);
-form.append(error, success, doc.replace(/\n/g, ""));
+form.append(error, doc.replace(/\n/g, ""));
 main.append(form);
 sendEmail.append(header, line, main);
 
