@@ -143,7 +143,7 @@ sendEmail.onload = async () => {
   }
   document.forms["form"].onsubmit = (e) => {
     e.preventDefault();
-    submitRequest(data[1].substr(1));
+    submitRequest();
   };
 };
 
