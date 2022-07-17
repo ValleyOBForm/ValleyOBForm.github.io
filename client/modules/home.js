@@ -368,6 +368,9 @@ const seeMessege = async (messege) => {
           doc,
           attention,
         ]);
+        window.onresize = () => {
+          window.location = "./?i=" + GetURLParameter("i");
+        };
       }
 
       document.getElementById("root").innerHTML = home._render();
@@ -493,10 +496,6 @@ window.addSign = () => {
   page.appendChild(img);
 
   document.querySelector(".canvasDiv").style.transform = "scale(0)";
-};
-
-window.onresize = () => {
-  window.location = "./?i=" + GetURLParameter("i");
 };
 
 function convertDataURIToBinary(dataURI) {
