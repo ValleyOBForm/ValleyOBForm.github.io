@@ -293,6 +293,11 @@ const seeMessege = async (messege) => {
   const dateField = form.getField("data");
   dateField.setText(dateCovert(new Date()));
   const pages = pdfDoc.getPages();
+  console.log(
+    pages,
+    (window.pages = pages),
+    (window.pdfDoc = pdfDoc)
+  );
   const pdfBytes = await pdfDoc.save();
   let maxWidth = 0;
   for (let x of pages) {
@@ -312,6 +317,7 @@ const seeMessege = async (messege) => {
   loadingTask.promise.then(
     function (pdf) {
       console.log("PDF loaded");
+      console.log((window.pdf = pdf));
       const canvasDiv = d.createElement("div").setAttribute({
         class: "canvasDiv",
       });
@@ -366,7 +372,7 @@ const seeMessege = async (messege) => {
           ),
           ,
           doc,
-          attention,
+          //attention,
         ]);
         window.onresize = () => {
           window.location = "./?i=" + GetURLParameter("i");
@@ -376,21 +382,66 @@ const seeMessege = async (messege) => {
       document.getElementById("root").innerHTML = home._render();
 
       for (let i = 0; i < pages.length; i++) {
-        let page = document.createElement("div");
-        page.setAttribute("class", "page");
+        let page_main = document.createElement("div");
+        page_main.setAttribute("class", "page");
         let canvas = document.createElement("canvas");
-        let sign = document.createElement("div");
-        sign.setAttribute("class", "sign");
-        sign.setAttribute("onclick", `signShow(${i})`);
-        sign.innerHTML = "Add sign";
-        page.append(canvas, sign);
-        document.querySelector(".document").appendChild(page);
-        pdf.getPage(i + 1).then(function (page) {
+        page_main.append(canvas);
+        document.querySelector(".document").appendChild(page_main);
+        pdf.getPage(i + 1).then(async function (page) {
           console.log("Page loaded");
+          console.log((window.page = page));
 
           let scale = 1.5;
           var viewport = page.getViewport({ scale: scale });
           pdfjsLib.scaleSize = scale;
+
+          let pageCon = await page.getTextContent();
+          console.log(pageCon);
+          for (let item = 0; item < pageCon.items.length; item++) {
+            let { str, height, width, transform } =
+              pageCon.items[item];
+            if (
+              String(str).toLowerCase().indexOf("signature") >= 0 ||
+              String(str).toLowerCase().indexOf("signed") >= 0
+            ) {
+              let sign = document.createElement("div");
+              sign.setAttribute("class", "sign");
+              sign.setAttribute(
+                "style",
+                `top: ${
+                  viewport.height -
+                  (height * scale +
+                    transform[5] * scale +
+                    transform[0] * scale +
+                    transform[2] * scale -
+                    16)
+                }px; left: ${
+                  width * scale +
+                  transform[4] * scale +
+                  transform[0] * scale /*+
+                  transform[2] * scale*/
+                }px; height: max-content`
+              );
+              sign.setAttribute(
+                "onclick",
+                `signShow(${i}, ${
+                  viewport.height -
+                  (height * scale +
+                    transform[5] * scale +
+                    transform[0] * scale +
+                    transform[2] * scale -
+                    16)
+                }, ${
+                  width * scale +
+                  transform[4] * scale +
+                  transform[0] * scale /*+
+                transform[2] * scale*/
+                }, this)`
+              );
+              sign.innerHTML = "Add sign";
+              page_main.append(sign);
+            }
+          }
           // Prepare canvas using PDF page dimensions
           var context = canvas.getContext("2d");
           canvas.height = viewport.height;
@@ -415,7 +466,7 @@ const seeMessege = async (messege) => {
   );
 };
 
-const signShow = async (i) => {
+const signShow = async (i, top, left, button) => {
   const canvas = document.querySelector("#canvas");
   const signaturePad = new SignaturePad(canvas, {
     minWidth: 1,
@@ -425,6 +476,9 @@ const signShow = async (i) => {
   document.querySelector(".canvasDiv").style.transform = "scale(1)";
   window.pageNo = i;
   window.signaturePad = signaturePad;
+  window.$top = top;
+  window.$left = left;
+  window.$button = button;
 };
 
 window.signShow = signShow;
@@ -440,6 +494,9 @@ window.addSign = () => {
   img.src = data;
   img.draggable = false;
   img.height = "75";
+  img.style.top = window.$top - 75 / 2 + "px";
+  img.style.left = window.$left + "px";
+  window.$button.remove();
   window.setPosition = (e) => {
     img.style.top = e.offsetY - 75 / 2 + "px";
     img.style.left = e.offsetX - 150 / 2 + "px";
@@ -459,7 +516,7 @@ window.addSign = () => {
     img.style.top = e.changedTouches[0].pageY - 75 / 2 - h + "px";
     img.style.left = e.changedTouches[0].pageX - 150 / 2 + "px";
   };
-
+  /*
   img.addEventListener("click", (e) => {
     img.style.border = "1px solid lime";
     let newPage = document.createElement("div");
@@ -493,6 +550,7 @@ window.addSign = () => {
       });
     });
   });
+  */
   page.appendChild(img);
 
   document.querySelector(".canvasDiv").style.transform = "scale(0)";
