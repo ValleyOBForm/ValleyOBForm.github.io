@@ -6,6 +6,7 @@ const pages = {
     changePass: "changePass",
     documentList: "documentList",
     documentAdd: "documentAdd",
+    inbox: "inbox",
   },
   page: {},
   root: "login",

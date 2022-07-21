@@ -6,6 +6,7 @@ import { userAdd } from "../../modules/userAdd.js";
 import { changePass } from "../../modules/changePass.js";
 import { documentList } from "../../modules/documentList.js";
 import { documentAdd } from "../../modules/documentAdd.js";
+import { inbox } from "../../modules/inbox.js";
 
 console.log("version " + d.version);
 console.log("Developer : " + d.meta.developer.name);
@@ -27,7 +28,14 @@ if (window.localStorage["com.valleyobform.login"]) {
 } else d.render("root", login);
 
 window.hashchange = () => {
-  if (pages.page[window.location.hash.toString().replace("#/", "")]) {
+  if (window.location.hash.toString().replace("#/", "") == "logout") {
+    delete window.localStorage["com.valleyobform.login"];
+    pages.page = {};
+    pages.root = "login";
+    d.render("root", login);
+  } else if (
+    pages.page[window.location.hash.toString().replace("#/", "")]
+  ) {
     d.render(
       "root",
       eval(
@@ -35,7 +43,7 @@ window.hashchange = () => {
       ).init()
     );
   } else {
-    d.render("root", eval(pages.page[pages.root]));
+    d.render("root", eval(pages.root));
   }
 };
 window.addEventListener("hashchange", hashchange, false);

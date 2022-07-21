@@ -1,19 +1,29 @@
-import d from "../assets/js/NTechDOM.js";
+import d from "../../assets/js/NTechDOM.js";
 import { header } from "./header.js";
 import { loading } from "./loading.js";
-const documentList = d.createElement("div");
+const inbox = d.createElement("div");
 
 const main = d
   .createElement("main")
   .setAttribute({ class: ["main"] });
-const h1 = d.createElement("h1", "PDF Documents");
+const searchInput = d.createElement("input").setAttribute({
+  type: "search",
+  class: "searchInput",
+  placeholder: "search by name or date(mm-dd-yyyy)",
+  autocomplete: "off",
+  spellcheck: "false",
+});
+const h1 = d.createElement("h1", [
+  "Inbox",
+  d.createElement("div", searchInput, { class: "searchInputDiv" }),
+]);
 
 const table = d
   .createElement("table")
   .setAttribute({ class: "table" });
 const thead = d.createElement("thead");
 
-const titles = ["Sr No.", "Issue Date", "Document Name", "Update"];
+const titles = ["Sr No.", "Issue Date", "Document Name", "View"];
 
 const theadTr = d.createElement("tr");
 for (let x of titles) {
@@ -50,7 +60,7 @@ const dataPrint = (data) => {
         "td",
         d.createElement("img").setAttribute(
           {
-            src: "./edit.svg",
+            src: "./view.svg",
             edit: i,
           },
           { style: "padding: 0;" }
@@ -63,31 +73,21 @@ const dataPrint = (data) => {
 
 table.append(thead, tbody);
 
-const button = d.createElement("button", "Add New PDF", {
-  onclick: "window.location='#/documentAdd'",
-});
+main.append(h1, table);
 
-main.append(
-  h1,
-  table,
-  d.createElement("div", button, {
-    class: "button-div",
-  })
-);
+inbox.append(header, loading);
 
-documentList.append(header, loading);
-
-documentList.onload = () => {
+inbox.onload = () => {
   delete header.documentEdit;
-  tbody.setChildren([""]);
-  documentList._rendered = false;
-  documentList.setChildren([header, loading]);
-  document.getElementById("root").innerHTML = documentList._render();
   header.onload();
+  tbody.setChildren([""]);
+  inbox._rendered = false;
+  inbox.setChildren([header, loading]);
+  document.getElementById("root").innerHTML = inbox._render();
   d.post(
-    "https://script.google.com/macros/s/AKfycbwGxEujY7EKh3xgV6V0XNLxQlcqW7L-dXKEK_m_/exec",
+    "https://script.google.com/macros/s/AKfycby9aYhOTJFe6qKsEpJ5CSfpntcrk4OWhCoZqiEVSA/exec",
     {
-      type: 6,
+      type: 1,
       data: JSON.stringify({
         database: window.localStorage["com.valleyobform.login"],
       }),
@@ -97,18 +97,17 @@ documentList.onload = () => {
       res = JSON.parse(JSON.parse(res).messege);
       const { result, data } = res;
       if (result) {
-        documentList._rendered = false;
-        documentList.setChildren([header, main]);
-        document.getElementById("root").innerHTML =
-          documentList._render();
+        inbox._rendered = false;
+        inbox.setChildren([header, main]);
+        document.getElementById("root").innerHTML = inbox._render();
         header.onload();
         dataPrint(data);
         for (let i = 0; i < data.length; i++) {
           document.querySelector(`img[edit="${i}"]`).onclick = () => {
-            header.documentEdit = {
+            header.sendEmail = {
               data: data[i],
             };
-            window.location = "#/documentAdd";
+            window.location = "#/sendEmail";
           };
         }
       } else alert("Error! Try again.");
@@ -118,4 +117,4 @@ documentList.onload = () => {
       console.log(err);
     });
 };
-export { documentList };
+export { inbox };

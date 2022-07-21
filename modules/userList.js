@@ -86,6 +86,10 @@ userList.append(header, loading);
 
 userList.onload = () => {
   delete header.userEdit;
+  tbody.setChildren([""]);
+  userList._rendered = false;
+  userList.setChildren([header, loading]);
+  document.getElementById("root").innerHTML = userList._render();
   header.onload();
   d.post(
     "https://script.google.com/macros/s/AKfycbwGxEujY7EKh3xgV6V0XNLxQlcqW7L-dXKEK_m_/exec",
