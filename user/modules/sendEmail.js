@@ -127,6 +127,7 @@ sendEmail.onload = async () => {
   };
   if (header.sendEmail) {
     let { data } = header.sendEmail;
+    console.log(data);
     let d_ = await convertDataURIToBinary(data[2].substr(1));
     delete window.localStorage["pdfjs.history"];
     webViewerLoad();
@@ -173,26 +174,30 @@ const submitRequest = async () => {
   });
 
   let fileId = new Date().getTime() + ".pdf";
-  let test = await octokit.request(
-    "PUT /repos/valleyobformdocument/documents/contents/" + fileId,
-    {
-      owner: "OWNER",
-      repo: "REPO",
-      path: "PATH",
-      message: "my commit message",
-      committer: {
-        name: "ValleyOBForm",
-        email: "valleyobform@gmail.com",
-      },
-      content: result,
-    }
-  );
+  // let test = await octokit.request(
+  //   "PUT /repos/valleyobformdocument/documents/contents/" + fileId,
+  //   {
+  //     owner: "OWNER",
+  //     repo: "REPO",
+  //     path: "PATH",
+  //     message: "my commit message",
+  //     committer: {
+  //       name: "ValleyOBForm",
+  //       email: "valleyobform@gmail.com",
+  //     },
+  //     content: result,
+  //   }
+  // );
+
+  console.log(header.sendEmail);
+
   d.post(
     "https://script.google.com/macros/s/AKfycbzLEX8OFSld2y-zSNGCw5oyqVWbqfoKO1kKrJ5n0cHJElKaNIQY0QnAQnLeGrR2eHzD/exec",
     {
       type: 2,
       data: JSON.stringify({
         time: "",
+        docName: header.sendEmail.data[1].substr(1),
         email: document.querySelector(`input[node='${email._node}'`)
           .value,
         date: document.querySelector(`input[node='${date._node}'`)
