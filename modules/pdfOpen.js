@@ -47,6 +47,7 @@ function convertDataURIToBinary(dataURI) {
   return array;
 }
 
+delete window.localStorage["pdfjs.history"];
 PDFViewerApplication.open(
   convertDataURIToBinary(test.split(",")[1])
 ).then(() => {

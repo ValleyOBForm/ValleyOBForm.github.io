@@ -1,7 +1,7 @@
 body {
   margin: 0;
   background-color: #fff;
-  font-family: Raleway, sans-serif;
+  font-family: "Inter", sans-serif;
   font-size: 14px;
   font-weight: 400;
   user-select: none;
@@ -55,9 +55,9 @@ body {
 .container .form-field input {
   padding: 14px 5px;
   width: calc(100% - 10px);
-  font-family: Raleway, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
   font-size: 14px;
-  font-weight: 400;
+  font-weight: 300;
   border: none;
   outline: none;
   background-color: #fff;
@@ -74,6 +74,7 @@ body {
   transition: all 0.5s;
   pointer-events: none;
   margin-left: 5px;
+  font-size: 16px;
 }
 
 .container .form-field input:focus {
@@ -173,12 +174,15 @@ body {
   /* background-color: #fcfcfc; */
   flex-direction: row;
   align-items: center;
-  width: 100%;
+  width: calc(100% - 30px);
+  padding: 15px;
+  padding-bottom: 0;
   /* box-shadow: rgb(60 64 67 / 30%) 0px 1px 2px 0px,
     rgb(60 64 67 / 15%) 0 2px 6px 2px; */
   /* box-shadow: 0 0 10px hsl(0deg 0% 0% / 10%),
     1px 1px 2px hsl(0deg 0% 0% / 10%); */
   display: flex;
+  background-color: #fff;
 }
 
 .header .logo2 {
@@ -191,10 +195,49 @@ body {
   height: 35px;
 }
 
+.header .headerSearchDiv {
+  display: flex;
+  flex-direction: row;
+  margin-left: 60px;
+}
+
+@media screen and (min-width: 800px) {
+  .header .headerSearchDiv {
+    margin-left: calc((100% - 800px) / 8);
+  }
+}
+
+.header .headerSearchSvg {
+  width: 20px;
+  position: relative;
+  left: 30px;
+  fill: rgb(51, 51, 51);
+  cursor: pointer;
+}
+
+.header .headerSearch {
+  background-color: #f2f3f5;
+  color: rgb(51, 51, 51);
+  font-size: 14px;
+  font-weight: 400;
+  padding: 10px;
+  outline: none;
+  font-family: "Inter", sans-serif;
+  transition: all 0.3s;
+  border-radius: 6px;
+  width: 400px;
+  padding-left: 40px;
+  border: 1px solid transparent;
+}
+
+.header .headerSearch:focus {
+  border: 1px solid #92989d;
+}
+
 .header nav {
   display: flex;
   flex-direction: row;
-  font: 600 14px Raleway, sans-serif;
+  font: 400 14px "Inter", sans-serif;
   justify-content: flex-end;
   align-items: center;
   width: 100%;
@@ -236,6 +279,7 @@ body {
   border-radius: 6px;
   padding: 36px;
   /* animation: bounceIn 2s; */
+  padding-top: 0;
 }
 
 .line {
@@ -248,13 +292,13 @@ body {
 .main h1 {
   margin: 0;
   font-size: 24px;
-  font-family: "Open Sans Condensed", Helvetica, sans-serif;
+  font-family: "Inter", sans-serif;
   font-weight: 700;
   display: flex;
   flex-direction: row;
 }
 
-.iframe .thanks {
+.thanks {
   width: max-content;
   font-size: 24px;
   font-family: "Open Sans Condensed", Helvetica, sans-serif;
@@ -302,9 +346,10 @@ body {
   width: 100%;
   border-collapse: collapse;
   margin-top: 30px;
+  /* box-shadow: rgb(0 0 0 / 10%) 0px 0px 5px 0px,
+    rgb(0 0 0 / 10%) 0px 0px 1px 0px; */
 }
 
-table,
 td,
 th {
   border: 1px solid #eee;
@@ -312,14 +357,16 @@ th {
 }
 
 th {
-  font-family: Raleway, sans-serif;
+  font-family: "Inter", sans-serif;
   font-size: 15px;
   font-weight: 600;
+  padding: 5px;
+  background-color: #fafafa;
 }
 
 td {
   vertical-align: bottom;
-  font-family: Raleway, sans-serif;
+  font-family: "Inter", sans-serif;
   font-size: 14px;
   font-weight: 500;
   max-width: max-content;
@@ -328,7 +375,7 @@ td {
 }
 
 td img {
-  width: 14px;
+  width: 20px;
   cursor: pointer;
 }
 
@@ -336,25 +383,25 @@ td:last-child {
   vertical-align: middle;
 }
 
-tbody tr:nth-child(odd) {
+/* tbody tr:nth-child(even) {
   background-color: #fafafa;
-}
+} */
 
-tbody tr:hover {
+/* tbody tr:hover {
   background-color: #f0f0f0;
-}
+} */
 
 td:first-child,
 th:first-child {
   width: 50px;
 }
 
-.table th {
+/* .table th {
   font-family: "Open Sans Condensed", Helvetica, sans-serif;
   font-size: 14px;
   font-weight: 700;
   padding: 5px;
-}
+} */
 
 .main .button-div {
   display: flex;
@@ -553,13 +600,19 @@ th:first-child {
 }
 
 .main .form .button svg,
-.line .button svg {
+.line .button svg,
+.spinerImg {
   width: 23.5px;
   fill: #fff;
   animation-name: spin;
   animation-duration: 0.5s;
   animation-iteration-count: infinite;
   animation-timing-function: linear;
+}
+
+.spinerImg {
+  width: 20px;
+  cursor: auto;
 }
 
 .line .button svg {
