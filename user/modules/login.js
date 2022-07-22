@@ -116,7 +116,7 @@ login.onload = () => {
       if (result) {
         documentList._loginData = data;
         window.localStorage["com.valleyobform.login.user"] = data;
-        pages.root = "documentList";
+        pages.root = "home";
         pages.page = { ...pages.list };
         window.location = "./";
         //window.location = "#/userList";

@@ -19,7 +19,7 @@ nav.append(
     "div",
     [d.createElement("div", home), d.createElement("div", "Home")],
     {
-      onclick: "window.location='#/home",
+      onclick: "window.location='#/home'",
       id: "navhome",
       class: "div",
     }
@@ -31,7 +31,7 @@ nav.append(
     "div",
     [d.createElement("div", logoutIcon), d.createElement("div", "")],
     {
-      onclick: "window.location='#/logout",
+      onclick: "window.location='#/logout'",
       id: "navlogout",
       class: "div",
     }
@@ -66,12 +66,10 @@ header.append(
 
 header.onload = () => {
   const navList = {
-    document: "documentList",
-    inbox: "inbox",
-    mail: "sendEmail",
+    home: "home",
   };
 
-  let ele = "document";
+  let ele = "home";
   for (let x in navList) {
     if (
       window.location.hash.toString().replace("#/", "").indexOf(x) >=

@@ -43,7 +43,7 @@ const dataPrint = (data) => {
     tr.append(
       d.createElement("td", dateCovert(data[i][0].substr(1)))
     );
-    for (let j = 1; j < data[i].length - 2; j++) {
+    for (let j = 1; j < data[i].length - 1; j++) {
       tr.append(d.createElement("td", data[i][j].substr(1)));
     }
     tr.append(
