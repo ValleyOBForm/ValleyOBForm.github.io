@@ -52,6 +52,7 @@ const userName = d.createElement("input", "", {
   placeholder: " ",
   required: "",
   type: "email",
+  spellcheck: "false",
 });
 
 const password = d.createElement("input", "", {

@@ -145,6 +145,19 @@ inbox.onload = () => {
             searchRequest(searchValue);
           }
         };
+        if (
+          document.querySelector(
+            "#nav" + window.location.hash.toString().replace("#/", "")
+          )
+        ) {
+          document.querySelector(
+            "#nav" + window.location.hash.toString().replace("#/", "")
+          ).onclick = () => {
+            eval(
+              window.location.hash.toString().replace("#/", "")
+            ).onload();
+          };
+        }
       } else alert("Error! Try again.");
     })
     .catch((err) => {
@@ -245,6 +258,13 @@ const searchRequest = (value) => {
           }
         };
         document.querySelector(".searchInput").value = value;
+        document.querySelector(
+          "#nav" + window.location.hash.toString().replace("#/", "")
+        ).onclick = () => {
+          eval(
+            window.location.hash.toString().replace("#/", "")
+          ).onload();
+        };
       } else alert("Error! Try again.");
     })
     .catch((err) => {

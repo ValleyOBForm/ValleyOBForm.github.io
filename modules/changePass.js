@@ -121,6 +121,15 @@ const succDiv = d.createElement(
     style: "width: 100%; text-align: left;",
   }
 );
+
+const thanks = d.createElement(
+  "div",
+  "Successfully changed password. Thank you!",
+  {
+    class: "thanks",
+  }
+);
+
 const closeBtn2 = `
 <svg onclick="closeDiv('.success')" aria-hidden="true" style="fill: rgb(34, 207, 92); cursor: pointer" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-x">
     <path fill-rule="evenodd" d="M3.72 3.72a.75.75 0 011.06 0L8 6.94l3.22-3.22a.75.75 0 111.06 1.06L9.06 8l3.22 3.22a.75.75 0 11-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 01-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 010-1.06z"></path>
@@ -135,6 +144,11 @@ main.append(h1, form);
 changePass.append(header, main);
 
 changePass.onload = () => {
+  document.querySelector(
+    "#nav" + window.location.hash.toString().replace("#/", "")
+  ).onclick = () => {
+    eval(window.location.hash.toString().replace("#/", "")).onload();
+  };
   header.onload();
   form.reset();
   document.forms["form"].onsubmit = (e) => {
@@ -184,13 +198,13 @@ const changeRequest = () => {
       const { result, messege } = res;
       if (result) {
         if (messege == "success") {
-          succDiv.setChildren("Successfully Changed Password!");
-          success.changeAttribute("style", "display: flex");
-          button
-            .setChildren("Change")
-            .removeAttribute("disabled", "style");
+          changePass._rendered = false;
+          changePass.setChildren([header, thanks]);
+          document.getElementById("root").innerHTML =
+            changePass._render();
+          header.onload();
         } else {
-          errDiv.setChildren("Old Password doesn't correct");
+          errDiv.setChildren("Old Password is't correct");
           error.changeAttribute("style", "display: flex");
           button
             .setChildren("Change")

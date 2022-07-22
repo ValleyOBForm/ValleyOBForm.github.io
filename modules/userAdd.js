@@ -125,6 +125,22 @@ const closeBtn2 = `
 `;
 success.append(succDiv, closeBtn2);
 
+const thanksDelete = d.createElement(
+  "div",
+  "Successfully delete user. Thank you!",
+  {
+    class: "thanks",
+  }
+);
+
+const thanksUpdate = d.createElement(
+  "div",
+  "Successfully changed user data. Thank you!",
+  {
+    class: "thanks",
+  }
+);
+
 form.append(userName, userDiv, passDiv, error, success, button);
 
 main.append(h1, form);
@@ -137,17 +153,17 @@ userAdd.onload = () => {
   if (header.userEdit) {
     form.append(button2);
     h1.setChildren("Edit user data");
-    let { data } = header.userEdit;
+    let { data, index } = header.userEdit;
     firstName.changeAttribute("value", data[1].substr(1));
     user.changeAttribute("value", data[2].substr(1));
     pass.changeAttribute("value", data[3].substr(1));
     button.setChildren("Edit");
     document.forms["form"].onsubmit = (e) => {
       e.preventDefault();
-      editRequest(data[0].substr(1), data[4].substr(1));
+      editRequest(data[0].substr(1), index);
     };
     document.querySelector(".delBtn").onclick = () => {
-      deleteRequest(data[4].substr(1));
+      deleteRequest(index);
     };
     return;
   }
@@ -258,11 +274,10 @@ const editRequest = (date, id) => {
       res = JSON.parse(JSON.parse(res).messege);
       const { result, messege } = res;
       if (result) {
-        succDiv.setChildren("Successfully changed user data.");
-        success.changeAttribute("style", "display: flex");
-        button
-          .setChildren("Edit")
-          .removeAttribute("disabled", "style");
+        userAdd._rendered = false;
+        userAdd.setChildren([header, thanksUpdate]);
+        document.getElementById("root").innerHTML = userAdd._render();
+        header.onload();
       } else {
         errDiv.setChildren("Error! Try agian");
         error.changeAttribute("style", "display: flex");
@@ -308,12 +323,10 @@ const deleteRequest = (id) => {
       res = JSON.parse(JSON.parse(res).messege);
       const { result } = res;
       if (result) {
-        button2
-          .setChildren("Delete")
-          .removeAttribute("disabled", "style");
-        form.setChildren(success);
-        succDiv.setChildren("Successfully delete user.");
-        success.changeAttribute("style", "display: flex");
+        userAdd._rendered = false;
+        userAdd.setChildren([header, thanksDelete]);
+        document.getElementById("root").innerHTML = userAdd._render();
+        header.onload();
       } else {
         errDiv.setChildren("Error! Try agian");
         error.changeAttribute("style", "display: flex");

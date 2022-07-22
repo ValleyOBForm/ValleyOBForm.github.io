@@ -1,6 +1,7 @@
 import d from "../assets/js/NTechDOM.js";
 import { header } from "./header.js";
 import { Octokit } from "https://cdn.skypack.dev/@octokit/core";
+import { userAdd } from "./userAdd.js";
 const documentAdd = d.createElement("div");
 
 const main = d
@@ -113,6 +114,22 @@ const closeBtn2 = `
 `;
 success.append(succDiv, closeBtn2);
 
+const thanksDelete = d.createElement(
+  "div",
+  "Successfully delete document. Thank you!",
+  {
+    class: "thanks",
+  }
+);
+
+const thanksUpdate = d.createElement(
+  "div",
+  "Successfully changed document data. Thank you!",
+  {
+    class: "thanks",
+  }
+);
+
 form.append(documentDiv, documentFileDiv, error, success, button);
 
 main.append(h1, form);
@@ -124,7 +141,7 @@ documentAdd.onload = () => {
   form.reset();
   if (header.documentEdit) {
     h1.setChildren("Edit Document Name");
-    let { data } = header.documentEdit;
+    let { data, index } = header.documentEdit;
     const src =
       "./assets/pdf.js/web/viewer.html?fileId=" + data[2].substr(1);
     documentName.changeAttribute("value", data[1].substr(1));
@@ -139,14 +156,10 @@ documentAdd.onload = () => {
     ]);
     document.forms["form"].onsubmit = (e) => {
       e.preventDefault();
-      editRequest(
-        data[0].substr(1),
-        data[2].substr(1),
-        data[3].substr(1)
-      );
+      editRequest(data[0].substr(1), data[2].substr(1), index);
     };
     document.querySelector(".delBtn").onclick = () => {
-      deleteRequest(data[3].substr(1));
+      deleteRequest(index);
     };
     return;
   }
@@ -312,11 +325,10 @@ const editRequest = (date, fileId, id) => {
       res = JSON.parse(JSON.parse(res).messege);
       const { result, messege } = res;
       if (result) {
-        succDiv.setChildren("Successfully changed user data.");
-        success.changeAttribute("style", "display: flex");
-        button
-          .setChildren("Edit")
-          .removeAttribute("disabled", "style");
+        userAdd._rendered = false;
+        userAdd.setChildren([header, thanksUpdate]);
+        document.getElementById("root").innerHTML = userAdd._render();
+        header.onload();
       } else {
         errDiv.setChildren("Error! Try agian");
         error.changeAttribute("style", "display: flex");
@@ -362,12 +374,10 @@ const deleteRequest = (id) => {
       res = JSON.parse(JSON.parse(res).messege);
       const { result } = res;
       if (result) {
-        button2
-          .setChildren("Delete")
-          .removeAttribute("disabled", "style");
-        form.setChildren(success);
-        succDiv.setChildren("Successfully delete user.");
-        success.changeAttribute("style", "display: flex");
+        userAdd._rendered = false;
+        userAdd.setChildren([header, thanksDelete]);
+        document.getElementById("root").innerHTML = userAdd._render();
+        header.onload();
       } else {
         errDiv.setChildren("Error! Try agian");
         error.changeAttribute("style", "display: flex");
