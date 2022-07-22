@@ -131,6 +131,14 @@ const doc = d.createElement("div").setAttribute({
   class: "document",
 });
 
+const thanksVerify = d.createElement(
+  "div",
+  "Successfully verified your date of birth. Thank you!",
+  {
+    class: "thanks",
+  }
+);
+
 const thanks = d.createElement(
   "div",
   "Successfully submitted signature. Thank you!",
@@ -154,13 +162,6 @@ const attention = d.createElement(
 );
 home.append(header, main, doc, footer);
 
-home.onload = async () => {
-  document.forms["form"].onsubmit = (e) => {
-    e.preventDefault();
-    submitRequest();
-  };
-};
-
 function GetURLParameter(parameter) {
   let data = [];
   let url = window.location.toString();
@@ -176,6 +177,17 @@ function GetURLParameter(parameter) {
   else data = data[0];
   return data;
 }
+
+home.onload = async () => {
+  if (GetURLParameter("d")) {
+    seeMessegeRequest();
+    return;
+  }
+  document.forms["form"].onsubmit = (e) => {
+    e.preventDefault();
+    submitRequest();
+  };
+};
 
 const submitRequest = () => {
   submit
@@ -199,7 +211,7 @@ const submitRequest = () => {
     fullDate.push(value);
   }
   d.post(
-    "https://script.google.com/macros/s/AKfycby_Ej5m-zMH0j92eXMhsoqpv83xcAjm3zvWVYkkzor5XX8uBpzxL6VVB-e_FJZAvBLq/exec",
+    "https://script.google.com/macros/s/AKfycbznltoxSIt9n-SCawxtdZL5ksbTtV4fUOU8BulOhNxPBorvilBAEmRmotdgHC_cKCk0/exec",
     {
       type: 0,
       data: JSON.stringify({
@@ -244,8 +256,83 @@ const submitRequest = () => {
             "block";
           document.querySelector("#error-field").innerHTML =
             "Signeture already submitted!";
+        } else if (messege == "verify") {
+          submit
+            .setChildren("Submit")
+            .removeAttribute("disabled", "style");
+          document.querySelector("#error-field").style.display =
+            "block";
+          document.querySelector("#error-field").innerHTML =
+            "Date of birth already verified!";
         } else {
-          seeMessege(messege);
+          home._rendered = false;
+          home.setChildren([header, thanksVerify, footer]);
+          document.getElementById("root").innerHTML = home._render();
+        }
+      }
+    })
+    .catch((err) => {
+      submit
+        .setChildren("Submit")
+        .removeAttribute("disabled", "style");
+      document.querySelector("#error-field").style.display = "block";
+      document.querySelector("#error-field").innerHTML =
+        "Error found! Please try again.";
+    });
+};
+
+const seeMessegeRequest = () => {
+  document.querySelector("#footer").remove();
+  main.setChildren(loading);
+  d.post(
+    "https://script.google.com/macros/s/AKfycbznltoxSIt9n-SCawxtdZL5ksbTtV4fUOU8BulOhNxPBorvilBAEmRmotdgHC_cKCk0/exec",
+    {
+      type: 1,
+      data: JSON.stringify({
+        id: GetURLParameter("d"),
+      }),
+    }
+  )
+    .then((res) => {
+      res = JSON.parse(JSON.parse(res).messege);
+      const { result, messege } = res;
+      if (result) {
+        if (messege == "id") {
+          home._rendered = false;
+          home.setChildren([
+            header,
+            thanksVerify.setChildren("Invalid Link"),
+            footer,
+          ]);
+          document.getElementById("root").innerHTML = home._render();
+        } else if (messege == "link") {
+          home._rendered = false;
+          home.setChildren([
+            header,
+            thanksVerify.setChildren("This link has been expired"),
+            footer,
+          ]);
+          document.getElementById("root").innerHTML = home._render();
+        } else if (messege == "used") {
+          home._rendered = false;
+          home.setChildren([
+            header,
+            thanksVerify.setChildren("Signeture already submitted!"),
+            footer,
+          ]);
+          document.getElementById("root").innerHTML = home._render();
+        } else if (messege == "verify") {
+          home._rendered = false;
+          home.setChildren([
+            header,
+            thanksVerify.setChildren(
+              "Date of birth isn't verify yet!"
+            ),
+            footer,
+          ]);
+          document.getElementById("root").innerHTML = home._render();
+        } else {
+          seeMessege(messege.substr(1));
         }
       }
     })
@@ -273,7 +360,6 @@ const dateCovert = (date) => {
 let { PDFDocument } = PDFLib;
 
 const seeMessege = async (messege) => {
-  document.querySelector("#footer").remove();
   main.setChildren(loading);
 
   const url =
@@ -335,7 +421,7 @@ const seeMessege = async (messege) => {
       const addBtn = d.createElement("button", "Add", {
         onclick: "addSign()",
       });
-      const cancleBtn = d.createElement("button", "Cancle", {
+      const cancleBtn = d.createElement("button", "Cancel", {
         onclick: "cancleSign()",
       });
 
@@ -438,7 +524,7 @@ const seeMessege = async (messege) => {
                 transform[2] * scale*/
                 }, this)`
               );
-              sign.innerHTML = "Add sign";
+              sign.innerHTML = "Sign";
               page_main.append(sign);
             }
           }

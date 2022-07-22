@@ -356,6 +356,7 @@ body {
 }
 
 .thanks {
+  min-width: 400px;
   width: max-content;
   font-size: 24px;
   font-family: "Open Sans Condensed", Helvetica, sans-serif;
@@ -364,6 +365,7 @@ body {
   margin: 150px auto 0;
   box-shadow: 0 0 10px hsl(0deg 0% 0% / 10%),
     1px 1px 2px hsl(0deg 0% 0% / 10%);
+  text-align: center;
 }
 
 /* laoding... */

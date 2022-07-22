@@ -184,8 +184,10 @@ const submitRequest = async () => {
     }
   );
 
-  console.log(header.sendEmail);
-
+  let clientName = "";
+  if (document.querySelector("input[name='Name']")) {
+    clientName = document.querySelector("input[name='Name']").value;
+  }
   d.post(
     "https://script.google.com/macros/s/AKfycbzLEX8OFSld2y-zSNGCw5oyqVWbqfoKO1kKrJ5n0cHJElKaNIQY0QnAQnLeGrR2eHzD/exec",
     {
@@ -197,7 +199,7 @@ const submitRequest = async () => {
           .value,
         date: document.querySelector(`input[node='${date._node}'`)
           .value,
-        name: document.querySelector("input[name='Name']").value,
+        name: clientName,
         fileId: fileId,
         id: "",
       }),
