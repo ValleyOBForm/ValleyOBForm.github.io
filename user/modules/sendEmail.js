@@ -6,12 +6,12 @@ const sendEmail = d.createElement("div");
 
 const main = d.createElement("main").setAttribute({
   class: ["main"],
-  style: "margin-bottom: 0; padding-bottom: 0; margin-top: 0;",
+  style: "margin-bottom: 0; margin-top: 50px",
 });
 
 const form = d.createElement("div").setAttribute({
   class: "iframe",
-  style: "margin-top :0; padding-top: 0;",
+  style: "margin-top :0; padding-top: 0; border: none;",
 });
 
 async function convertDataURIToBinary(fileId) {
@@ -95,11 +95,7 @@ const line = d.createElement("form", [emailDiv, dateDiv, button], {
   class: ["line", "form"],
   name: "form",
 });
-// form.append();
 
-// main.append(h1, form);
-
-// sendEmail.append(header, main);
 form.append(error, doc.replace(/\n/g, ""));
 main.append(form);
 sendEmail.append(header, line, main);
@@ -127,7 +123,6 @@ sendEmail.onload = async () => {
   };
   if (header.sendEmail) {
     let { data } = header.sendEmail;
-    console.log(data);
     let d_ = await convertDataURIToBinary(data[2].substr(1));
     delete window.localStorage["pdfjs.history"];
     webViewerLoad();
@@ -174,20 +169,20 @@ const submitRequest = async () => {
   });
 
   let fileId = new Date().getTime() + ".pdf";
-  // let test = await octokit.request(
-  //   "PUT /repos/valleyobformdocument/documents/contents/" + fileId,
-  //   {
-  //     owner: "OWNER",
-  //     repo: "REPO",
-  //     path: "PATH",
-  //     message: "my commit message",
-  //     committer: {
-  //       name: "ValleyOBForm",
-  //       email: "valleyobform@gmail.com",
-  //     },
-  //     content: result,
-  //   }
-  // );
+  let test = await octokit.request(
+    "PUT /repos/valleyobformdocument/documents/contents/" + fileId,
+    {
+      owner: "OWNER",
+      repo: "REPO",
+      path: "PATH",
+      message: "my commit message",
+      committer: {
+        name: "ValleyOBForm",
+        email: "valleyobform@gmail.com",
+      },
+      content: result,
+    }
+  );
 
   console.log(header.sendEmail);
 

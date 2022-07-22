@@ -182,7 +182,7 @@ body {
   /* box-shadow: 0 0 10px hsl(0deg 0% 0% / 10%),
     1px 1px 2px hsl(0deg 0% 0% / 10%); */
   display: flex;
-  background-color: #fff;
+  /* background-color: #fff; */
 }
 
 .header .logo2 {
@@ -294,6 +294,7 @@ body {
   max-width: 800px;
   display: flex;
   flex-direction: row;
+  margin-top: 30px;
 }
 
 .main h1 {

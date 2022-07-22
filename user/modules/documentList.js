@@ -64,7 +64,7 @@ const dataPrint = (data) => {
 
 table.append(thead, tbody);
 
-main.append(h1, table);
+main.append(table);
 
 documentList.append(header, loading);
 

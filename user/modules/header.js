@@ -70,12 +70,14 @@ header.onload = () => {
   };
 
   let ele = "home";
+  let type = "";
   for (let x in navList) {
     if (
       window.location.hash.toString().replace("#/", "").indexOf(x) >=
       0
     ) {
       ele = x;
+      type = x;
     }
   }
 
@@ -88,8 +90,16 @@ header.onload = () => {
       active.style.fill = "#0e78c4";
     }
   }
-  // userName.setChildren([
-  //   window.localStorage["com.valleyobform.login.user"].substr(1),
-  // ]);
+  if (!type) {
+    let active = document.querySelector(`#navhome`);
+    active.style.color = "";
+    active.style.fill = "";
+  }
+  if (
+    window.location.hash.toString().replace("#/", "") == "sendEmail"
+  )
+    document.querySelector(".headerSearchDiv").style.display = "none";
+  else
+    document.querySelector(".headerSearchDiv").style.display = "flex";
 };
 export { header };
