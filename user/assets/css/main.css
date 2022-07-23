@@ -450,7 +450,7 @@ th:first-child {
 .main .button-div button {
   padding: 5px 10px;
   display: block;
-  background-color: rgb(0, 74, 127);
+  background-color: #004a7f;
   color: #fff;
   border: 2px solid #004a7f;
   border-radius: 5px;

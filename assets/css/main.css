@@ -529,7 +529,7 @@ th:first-child {
 
 .main .form .button,
 .line .button {
-  background-color: rgb(0, 93, 180);
+  background-color: #004a7f;
   border: 1px solid #fff;
   border-radius: 3px;
   font-family: "Open Sans Condensed", Helvetica, sans-serif;

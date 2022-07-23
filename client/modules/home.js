@@ -122,7 +122,7 @@ const finalSubmitDiv = d.createElement("div").setAttribute({
   class: "finalSubmitDiv",
 });
 
-const finalSubmit = d.createElement("button", "Submit", {
+const finalSubmit = d.createElement("button", "Send", {
   class: "finalSubmit",
   onclick: "finalSubmitRequest()",
 });
@@ -461,7 +461,7 @@ const seeMessege = async (messege) => {
           //attention,
         ]);
         window.onresize = () => {
-          window.location = "./?i=" + GetURLParameter("i");
+          window.location = "./?d=" + GetURLParameter("d");
         };
       }
 
@@ -769,7 +769,7 @@ const finalSubmitRequest = async () => {
 
   if (imgsCount == 0) {
     finalSubmit
-      .setChildren("Submit")
+      .setChildren("Send")
       .removeAttribute("disabled", "style");
     document.querySelector(".finalSubmitError").style.display =
       "block";
@@ -779,12 +779,12 @@ const finalSubmitRequest = async () => {
     await pdfShow(pdfDocPages.length, pdfBytes);
     let pdfData = await uint8ArrayToBase64(pdfBytes);
     d.post(
-      "https://script.google.com/macros/s/AKfycby_Ej5m-zMH0j92eXMhsoqpv83xcAjm3zvWVYkkzor5XX8uBpzxL6VVB-e_FJZAvBLq/exec",
+      "https://script.google.com/macros/s/AKfycbznltoxSIt9n-SCawxtdZL5ksbTtV4fUOU8BulOhNxPBorvilBAEmRmotdgHC_cKCk0/exec",
       {
-        type: 1,
+        type: 2,
         data: JSON.stringify({
           data: pdfData,
-          id: GetURLParameter("i"),
+          id: GetURLParameter("d"),
         }),
       }
     )
@@ -799,7 +799,7 @@ const finalSubmitRequest = async () => {
       })
       .catch((err) => {
         finalSubmit
-          .setChildren("Submit")
+          .setChildren("Send")
           .removeAttribute("disabled", "style");
         document.querySelector(".finalSubmitError").style.display =
           "block";
