@@ -118,13 +118,13 @@ const convertDataURIToBinary = async (fileId) => {
   return array;
 }
 
-const newRender = () => {
+const newRender = (type = "") => {
   if (PDFViewerApplication.documentInfo !== null) {
-    PDFViewerApplication.rendered();
+    rendered(type);
     return;
   }
   setTimeout(() => {
-    newRender();
+    newRender(type);
   }, 1000);
 };
 
@@ -136,18 +136,24 @@ const inputPrevent = (e) => {
 
 window.inputPrevent = inputPrevent;
 
-PDFViewerApplication.rendered = () => {
-  let nameList = document.querySelectorAll("input[name='Name']");
-  for (let x of nameList) {
+const rendered = (type = "") => {
+  let List = document.querySelectorAll("#viewerContainer input");
+  for (let x of List) {
     x.setAttribute("oninput", "inputPrevent(event)");
     x.setAttribute("autocomplete", "off");
   }
-  /*if(nameList.length == 0){
-    setTimeout(PDFViewerApplication.rendered, 1000);
-  } else{*/
+  if(List.length == 0){
+    setTimeout(function() {
+      rendered(type)
+    }, 1000)
+    return;
+  }
+  if(type == "") {
     document.getElementById("loading").style.display = "none";
-  //}
+  }
 };
+
+PDFViewerApplication.rendered = rendered;
 
 const uint8ArrayToBase64 = async (data) => {
   const base64url = await new Promise((r) => {

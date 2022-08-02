@@ -289,7 +289,7 @@ const signatureSubmit = async (button) => {
   
   const pages = pdfDoc.getPages();
   
-  let ip = await d.get("http://ifconfig.me/ip");
+  let ip = await d.get("https://ifconfig.me/ip");
   ip = "IP Address: " + ip;
   const fontSize = 10;
   const textWidth = Font.widthOfTextAtSize(ip, fontSize);

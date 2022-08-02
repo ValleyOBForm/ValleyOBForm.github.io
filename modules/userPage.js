@@ -102,7 +102,7 @@ const userPage = `
 
 							<div class="mdl-input-bx">
 								<label>IP Address (Optional)</label>
-								<input type="text" name="" id="addUserIp" class="form-control" autocomplete="off" placeholder="Enter IP Address"/>
+								<textarea type="text" name="" id="addUserIp" class="form-control" autocomplete="off" placeholder="Enter IP Address"></textarea>
 							</div>
 							<button type="submit" id="addUserBtn" class="custom-btn popSubmit">Add</button>
 							<div style="color: red; text-align: center; font-size: 14px; margin-top: 15px; display: none;" id="adduser-error">

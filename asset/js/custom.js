@@ -249,6 +249,10 @@ const addUserLoad = (data) => {
     success.style.display = "none";
     loading.style.display = "block";
     
+    let ipValue = ip.value.replace(/\n/g, ",");
+    if(ipValue.slice(-1) == ","){
+      ipValue = ipValue.slice(0, -1);
+    }
     d.post(
     "https://script.google.com/macros/s/AKfycbwGxEujY7EKh3xgV6V0XNLxQlcqW7L-dXKEK_m_/exec",
     {
@@ -258,7 +262,7 @@ const addUserLoad = (data) => {
         email: email.value.trim(),
         pass: password.value,
         history: history.value,
-        ip: ip.value,
+        ip: ipValue,
         database: window.d.messege,
       }),
     }
