@@ -112,7 +112,7 @@ const emailPage = `
 						<img src="./asset/img/verified.png" alt="Success">
 					</div>
 					<h3 class="modal-title text-center">Thank You!</h3>
-					<p>Successfully sent email</p>
+					<p>Document sent.</p>
 
 				</div><!-- modal-body -->
 			</div>

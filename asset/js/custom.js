@@ -7,7 +7,8 @@ const loginLoad = () => {
   let username = document.querySelector("#username");
   let password = document.querySelector("#password");
   let loginBtn = document.querySelector("#loginBtn");
-
+  
+  forgetPasswordLoad();
   document.forms["admin-login-form"].onsubmit = (e) => {
    e.preventDefault();
    loginBtn.disabled = true;
@@ -40,6 +41,33 @@ const loginLoad = () => {
 }
 };
 
+const forgetPasswordLoad = () => {
+  let forgetBtn = document.querySelector("#forgetPassWord");
+  let loading = document.querySelector("#loading");
+  
+  
+forgetBtn.onclick = () =>{
+  loading.style.display = "block";
+  
+  d.post(
+    "https://script.google.com/macros/s/AKfycbwGxEujY7EKh3xgV6V0XNLxQlcqW7L-dXKEK_m_/exec",
+      {
+        type: 14,
+        data: JSON.stringify({
+        }),
+      }
+    ).then(async (res) => {
+      res = JSON.parse(JSON.parse(res).messege);
+      const { result, messege } = res;
+      if (result) {
+        loading.style.display = "none";
+        $("#sentEmailModal").modal('show');
+      }
+    });
+    
+}
+}
+
 const showUserData = (data, type = "") => {
   let table = document.querySelector(".custom-table");
   let loading = document.querySelector("#loading");
@@ -55,7 +83,7 @@ const showUserData = (data, type = "") => {
   		<td>${x[0].substr(1)}</td>
   		<td>${x[1].substr(1)}</td>
   		<td>${x[2].substr(1)} days</td>
-  		<td>${(x[3] != "x") ? x[3].substr(1) : "-"}</td>
+  		<td>${(x[3] != "x") ? x[3].substr(1).replace(/,/g, "<br>") : "-"}</td>
   		<td>
   		  <button id="delete-${id}" class="tb-btn delete">
 					<span class="icon"><img src="asset/img/Icon-feather-trash.png" alt="Trash"/></span>

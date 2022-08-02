@@ -14,7 +14,7 @@ const login = `
   					<div class="row">
   						<div class="col-sm-12">
   							<div class="input-bx">
-  								<input type="email" name="username" spellcheck="false" id="username" class="form-control" autocomplete="off" required placeholder="Username"/>
+  								<input readonly style="background: transparent;" onfocus="this.removeAttribute('readonly'); this.focus()" type="email" name="username" spellcheck="false" id="username" class="form-control" autocomplete="off" required placeholder="Username"/>
   							</div>
   						</div><!-- col -->
   					</div><!-- row -->
@@ -22,7 +22,7 @@ const login = `
   					<div class="row">
   						<div class="col-sm-12">
   							<div class="input-bx pass-bx">
-  								<input type="password" name="password" id="password" class="form-control" autocomplete="off" required placeholder="Password"/>
+  								<input readonly style="background: transparent;" onfocus="this.removeAttribute('readonly'); this.focus()" type="password" name="password" id="password" class="form-control" autocomplete="off" required placeholder="Password"/>
   							</div>
   						</div><!-- col -->
   					</div><!-- row -->

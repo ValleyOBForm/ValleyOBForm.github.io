@@ -370,7 +370,10 @@ const signatureSubmit = async (button) => {
         const { result } = res;
         if (result) {
           loading.style.display = "none";
-          $('#successModal').modal('show');
+          document.querySelector("#viewerDiv").style.display = "none";
+          $('#successModal').modal({
+			      backdrop: 'static'
+          });
         } else{
           signBtn.style.display = "";
           loading.style.display = "none";

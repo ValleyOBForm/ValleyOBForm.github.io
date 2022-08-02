@@ -45,7 +45,7 @@ const loginLoad = () => {
         window.d.messege = messege;
         window.d.history = history;
       } else if(result && messege == "ip"){
-        document.querySelector("#login-error").innerText = "Wrong ip address. Please try again."
+        document.querySelector("#login-error").innerText = "Unauthorized Access. Contact System Administrator."
         document.querySelector("#login-error").style.display = "block";
         loginBtn.disabled = false;
         loginBtn.innerText = "Login";
