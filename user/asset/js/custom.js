@@ -3,11 +3,49 @@ import { page } from "../../modules/page.js";
 import { emailPage } from "../../modules/email.js";
 import { Octokit } from "https://cdn.skypack.dev/@octokit/core";
 
+const setCaretPosition = (e, pos) => {
+  // Modern browsers
+  if (e.setSelectionRange) {
+    e.focus();
+    e.setSelectionRange(pos, pos);
+  
+  // IE8 and below
+  } else if (e.createTextRange) {
+    var range = e.createTextRange();
+    range.collapse(true);
+    range.moveEnd('character', pos);
+    range.moveStart('character', pos);
+    range.select();
+  }
+}
+
+
 const loginLoad = () => {
   let username = document.querySelector("#username");
   let password = document.querySelector("#password");
   let loginBtn = document.querySelector("#loginBtn");
+  
+  let $password = "";
+  password.oninput = (e) => {
+    if(e.data){
+      $password = $password.substr(0, e.target.selectionStart - 1)
+         + e.data + $password.substr(e.target.selectionStart - 1);
+    } else{
+      $password = $password.substr(0, e.target.selectionStart)
+         + $password.substr(e.target.selectionStart + ($password.length - e.target.value.length));
+    }
+    
+    let start = e.target.selectionStart;
+    let value = e.target.value;
+    let result = ""
+    for(let i of value){
+      result += "•";
+    }
+    e.target.value = result;
+    setCaretPosition(e.target, start);
+  };
 
+  
   document.forms["admin-login-form"].onsubmit = async (e) => {
    e.preventDefault();
    loginBtn.disabled = true;
@@ -29,7 +67,7 @@ const loginLoad = () => {
         type: 0,
         data: JSON.stringify({
           userName: username.value.trim(),
-          password: password.value,
+          password: $password,
           ip: ipAddress
         }),
       }
