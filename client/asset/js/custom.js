@@ -279,14 +279,24 @@ const signatureSubmit = async (button) => {
   
   const Font = await pdfDoc.embedFont(StandardFonts.Helvetica);
   
+  let dateField1 = false;
+  let dateField2 = false;
   const form = pdfDoc.getForm();
   let fields = form.getFields();
   for (let i = 0; i < fields.length; i++) {
-    console.log(fields[i].getName());
+    let fieldName = fields[i].getName();
+    if(fieldName == "data") dateField1 = true;
+    if(fieldName == "Date") dateField2 = true;
   }
-  const dateField = form.getField("data");
-  dateField.setText(dateCovert(new Date()));
+  if(dateField1){
+    const dateField = form.getField("data");
+    dateField.setText(dateCovert(new Date()));
+  }
   
+  if(dateField2){
+    const dateField = form.getField("Date");
+    dateField.setText(dateCovert(new Date()));
+  }
   const pages = pdfDoc.getPages();
   
   let ip = await d.get("https://ifconfig.me/ip");
