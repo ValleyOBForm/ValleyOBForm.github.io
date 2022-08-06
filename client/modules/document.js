@@ -45,7 +45,7 @@ const $document = `
 		</main>
 	</section><!-- wrapper -->
 
-	<!-- Modal Thank you Success message -->
+	<!-- Modal Signature -->
 	<div class="modal fade custom-modal" id="signatureModal" tabindex="-1" role="dialog" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
 			<div class="modal-content">
@@ -87,7 +87,7 @@ const $document = `
 	</div>
 	<!-- modal -->
 	
-  <!-- Modal Thank you Success message -->
+  <!-- Modal Error message -->
 	<div class="modal fade custom-modal verifiedModalClass" id="errorModal" tabindex="-1" role="dialog" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
 			<div class="modal-content">

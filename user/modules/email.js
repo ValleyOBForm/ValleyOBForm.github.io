@@ -55,10 +55,10 @@ const emailPage = `
 							<div class="col-md-5 col-lg-4">
 
 								<div class="user-send-email-wrapp">
-								  <div class="mdl-input-bx">
+								  <!--div class="mdl-input-bx">
 										<label>Name</label>
 										<input type="text" oninput="inputPrevent(event)" name="" id="emailSendName" class="form-control" spellcheck="false" autocomplete="off" required placeholder="Copy & paste only"/>
-									</div>
+									</div-->
 								  
 									<div class="mdl-input-bx">
 										<label>Email</label>
@@ -70,7 +70,7 @@ const emailPage = `
 										<input type="text" name="" oninput="inputPrevent(event)" id="emailSendDate" class="form-control" spellcheck="false" autocomplete="off" required placeholder="Copy & paste only"/>
 									</div>
 									
-									<div style="color: red; text-align: center; font-size: 14px; margin-top: 10px; display: none;" id="error">
+									<div style="color: red; text-align: center; font-size: 14px; margin-top: 10px; margin-bottom: 15px; display: none;" id="error">
   					        Something is wrong. Please try again.
   					      </div>
 									<button type="submit" class="custom-btn" id="emailSendBtn">Send</button>		

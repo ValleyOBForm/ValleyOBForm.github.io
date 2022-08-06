@@ -175,17 +175,17 @@ const userPage = `
 						  
 						  <div class="mdl-input-bx">
 								<label>Enter Old Password</label>
-								<input minlength="5" type="password" spellcheck="false" name="" required id="oldPass" class="form-control" autocomplete="off" placeholder="Enter Old Password"/>
+								<input minlength="5" type="text" spellcheck="false" name="" required id="oldPass" class="form-control" autocomplete="off" placeholder="Enter Old Password"/>
 							</div>
 						  
 							<div class="mdl-input-bx">
 								<label>Enter New Password</label>
-								<input minlength="5" type="password" spellcheck="false" name="" required id="newPass" class="form-control" autocomplete="off" placeholder="Enter New Password"/>
+								<input minlength="5" type="text" spellcheck="false" name="" required id="newPass" class="form-control" autocomplete="off" placeholder="Enter New Password"/>
 							</div>
 							
 							<div class="mdl-input-bx">
 								<label>Confirm New Password</label>
-								<input minlength="5" type="password" spellcheck="false" name="" required id="conNewPass" class="form-control" autocomplete="off" placeholder="Confirm New Password"/>
+								<input minlength="5" type="text" spellcheck="false" name="" required id="conNewPass" class="form-control" autocomplete="off" placeholder="Confirm New Password"/>
 							</div>
 							
 							<button type="submit" id="changePasswordBtn" class="custom-btn popSubmit">Change</button>

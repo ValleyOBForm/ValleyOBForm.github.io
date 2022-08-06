@@ -158,17 +158,17 @@ const documentPage = `
 						  
 						  <div class="mdl-input-bx">
 								<label>Enter Old Password</label>
-								<input minlength="5" type="password" spellcheck="false" name="" required id="oldPass" class="form-control" autocomplete="off" placeholder="Enter Old Password"/>
+								<input minlength="5" type="text" spellcheck="false" name="" required id="oldPass" class="form-control" autocomplete="off" placeholder="Enter Old Password"/>
 							</div>
 						  
 							<div class="mdl-input-bx">
 								<label>Enter New Password</label>
-								<input minlength="5" type="password" spellcheck="false" name="" required id="newPass" class="form-control" autocomplete="off" placeholder="Enter New Password"/>
+								<input minlength="5" type="text" spellcheck="false" name="" required id="newPass" class="form-control" autocomplete="off" placeholder="Enter New Password"/>
 							</div>
 							
 							<div class="mdl-input-bx">
 								<label>Confirm New Password</label>
-								<input minlength="5" type="password" spellcheck="false" name="" required id="conNewPass" class="form-control" autocomplete="off" placeholder="Confirm New Password"/>
+								<input minlength="5" type="text" spellcheck="false" name="" required id="conNewPass" class="form-control" autocomplete="off" placeholder="Confirm New Password"/>
 							</div>
 							
 							<button type="submit" id="changePasswordBtn" class="custom-btn popSubmit">Change</button>
@@ -187,6 +187,54 @@ const documentPage = `
 		</div>
 	</div>
 	<!-- modal -->
+	
+	<!-- Modal Thank you Success message -->
+
+	<div class="modal fade custom-modal" id="successModal" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button style="display: none; type="button" class="close ml-auto" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+
+				<div class="modal-body text-center">
+					<div class="img mb-4">
+						<img src="./asset/img/verified.png" alt="Success">
+					</div>
+					<h3 class="modal-title text-center">Thank You!</h3>
+					<p id="modal-success">Document Sent</p>
+
+				</div><!-- modal-body -->
+			</div>
+		</div>
+	</div>
+	<!-- modal -->
+	
+  <!-- Modal Error message -->
+	<div class="modal fade custom-modal" id="errorModal" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button id="error-Close" type="button" class="close ml-auto" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+
+				<div class="modal-body text-center">
+					<div class="img mb-4">
+						<img style="width: 75px;" src="./asset/img/error.png" alt="Error">
+					</div>
+					<h3 class="modal-title text-center">Error!</h3>
+					<p id="modal-error">Please try again.</p>
+
+				</div><!-- modal-body -->
+			</div>
+		</div>
+	</div>
+	<!-- modal -->
+	
 `
 
 export { documentPage };

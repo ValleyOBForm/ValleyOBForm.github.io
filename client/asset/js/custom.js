@@ -1,6 +1,8 @@
 import { verify } from "../../modules/verify.js";
 import { $document } from "../../modules/document.js";
 
+const clientGAS = "https://script.google.com/macros/s/AKfycbznltoxSIt9n-SCawxtdZL5ksbTtV4fUOU8BulOhNxPBorvilBAEmRmotdgHC_cKCk0/exec";
+
 let { PDFDocument, StandardFonts, rgb } = PDFLib;
 
 function GetURLParameter(parameter) {
@@ -41,7 +43,7 @@ const verifyLoad = () => {
     }
     
     d.post(
-    "https://script.google.com/macros/s/AKfycbznltoxSIt9n-SCawxtdZL5ksbTtV4fUOU8BulOhNxPBorvilBAEmRmotdgHC_cKCk0/exec",
+    clientGAS,
     {
       type: 0,
       data: JSON.stringify({
@@ -87,7 +89,9 @@ const verifyLoad = () => {
           //e.target.reset();
           button.innerText = "Submit";
           loading.style.display = "none";
-          $('#verifiedDobModal').modal('show');
+          $('#verifiedDobModal').modal({
+			      backdrop: 'static'
+          });
         }
       }
     })
@@ -108,7 +112,7 @@ const seeMessegeRequest = () => {
   let error = document.querySelector("#error");
   
   d.post(
-    "https://script.google.com/macros/s/AKfycbznltoxSIt9n-SCawxtdZL5ksbTtV4fUOU8BulOhNxPBorvilBAEmRmotdgHC_cKCk0/exec",
+    clientGAS,
     {
       type: 1,
       data: JSON.stringify({
@@ -163,10 +167,16 @@ const convertDataURIToBinary = async (fileId, type = "") => {
   let dataURI;
   if(type == "") 
   {
-    dataURI = await d.getBlobData64(
-    "https://raw.githubusercontent.com/valleyobformdocument/documents/main/" +
-      fileId
-    );
+    let {data} = JSON.parse(JSON.parse(await d.post(
+      clientGAS,{
+        type: 3,
+        data: JSON.stringify({
+          id: fileId
+        })
+      }
+    )).messege);
+    
+    dataURI = "pdf," + data;
   }
   else dataURI = fileId;
   //console.log(dataURI);
@@ -230,7 +240,7 @@ const uint8ArrayToBase64 = async (data) => {
     reader.onload = () => r(reader.result);
     reader.readAsDataURL(new Blob([data]));
   });
-  return base64url.split(",", 2)[1];
+  return base64url;
 };
 
 const signShow = () => {
@@ -279,24 +289,21 @@ const signatureSubmit = async (button) => {
   
   const Font = await pdfDoc.embedFont(StandardFonts.Helvetica);
   
-  let dateField1 = false;
-  let dateField2 = false;
+  //let dateField1 = false;
+  //let dateField2 = false;
   const form = pdfDoc.getForm();
   let fields = form.getFields();
+  /*
   for (let i = 0; i < fields.length; i++) {
     let fieldName = fields[i].getName();
     if(fieldName == "data") dateField1 = true;
     if(fieldName == "Date") dateField2 = true;
-  }
-  if(dateField1){
-    const dateField = form.getField("data");
-    dateField.setText(dateCovert(new Date()));
-  }
+  }*/
   
-  if(dateField2){
+  //if(dateField2){
     const dateField = form.getField("Date");
     dateField.setText(dateCovert(new Date()));
-  }
+  //}
   const pages = pdfDoc.getPages();
   
   let ip = await d.get("https://ifconfig.me/ip");
@@ -333,8 +340,7 @@ const signatureSubmit = async (button) => {
     for (let item = 0; item < pageContent.items.length; item++) {
       let { str, height, width, transform } = pageContent.items[item];
       if (
-        String(str).toLowerCase().indexOf("signature") >= 0 ||
-        String(str).toLowerCase().indexOf("signed") >= 0
+        str == "Signature:"
       ) {
         
         let top = (
@@ -366,11 +372,11 @@ const signatureSubmit = async (button) => {
   
   let pdfData = await uint8ArrayToBase64(pdfBytes);
     d.post(
-      "https://script.google.com/macros/s/AKfycbznltoxSIt9n-SCawxtdZL5ksbTtV4fUOU8BulOhNxPBorvilBAEmRmotdgHC_cKCk0/exec",
+      clientGAS,
       {
         type: 2,
         data: JSON.stringify({
-          data: "data:application/pdf;base64," + pdfData,
+          data: pdfData,
           id: GetURLParameter("d"),
         }),
       }
@@ -424,6 +430,7 @@ const seeMessege = async (fileId) => {
     $('#errorModal').modal({
 			backdrop: 'static'
     });
+    console.log(err)
   }
 }
 

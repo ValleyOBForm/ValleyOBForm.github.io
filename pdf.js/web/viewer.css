@@ -3137,7 +3137,7 @@ dialog :link {
     transform: scaleY(1);
   }
 }
-
+/*
 body {
   background-color: #fff;
 }
@@ -3147,7 +3147,7 @@ body {
 .secondaryToolbar,
 .editorParamsToolbar {
   background-color: transparent;
-}
+}*/
 #secondaryToolbarToggle,
 #presentationMode,
 #openFile,
@@ -3155,6 +3155,7 @@ body {
 #sidebarContainer {
   display: none;
 }
+/*
 .pdfViewer .page {
   border: none;
-}
+}*/

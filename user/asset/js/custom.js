@@ -1,7 +1,8 @@
 import { login } from "../../modules/login.js";
 import { page } from "../../modules/page.js";
 import { emailPage } from "../../modules/email.js";
-import { Octokit } from "https://cdn.skypack.dev/@octokit/core";
+
+const userGAS = "https://script.google.com/macros/s/AKfycbzLEX8OFSld2y-zSNGCw5oyqVWbqfoKO1kKrJ5n0cHJElKaNIQY0QnAQnLeGrR2eHzD/exec";
 
 const setCaretPosition = (e, pos) => {
   // Modern browsers
@@ -62,7 +63,7 @@ const loginLoad = () => {
      return;
    }
     d.post(
-      "https://script.google.com/macros/s/AKfycbzLEX8OFSld2y-zSNGCw5oyqVWbqfoKO1kKrJ5n0cHJElKaNIQY0QnAQnLeGrR2eHzD/exec",
+      userGAS,
       {
         type: 0,
         data: JSON.stringify({
@@ -119,7 +120,7 @@ const documentsLoad = () => {
   button.onclick = () => {
     document.querySelector("#body").innerHTML = page;
     d.post(
-      "https://script.google.com/macros/s/AKfycbzLEX8OFSld2y-zSNGCw5oyqVWbqfoKO1kKrJ5n0cHJElKaNIQY0QnAQnLeGrR2eHzD/exec",
+      userGAS,
       {
         type: 1,
         data: JSON.stringify({
@@ -141,12 +142,8 @@ const documentsLoad = () => {
   }
 }
 
-const convertDataURIToBinary = async (fileId) => {
-  let dataURI = await d.getBlobData64(
-    "https://raw.githubusercontent.com/valleyobformdocument/documents/main/" +
-      fileId
-  );
-  var raw = window.atob(dataURI.split(",")[1]);
+const convertDataURIToBinary = (dataURI) => {
+  var raw = window.atob(dataURI);
   var rawLength = raw.length;
 
   var array = new Uint8Array(new ArrayBuffer(rawLength));
@@ -175,10 +172,11 @@ const inputPrevent = (e) => {
 window.inputPrevent = inputPrevent;
 
 const rendered = (type = "") => {
-  let List = document.querySelectorAll("#viewerContainer input");
+  let List = document.querySelectorAll("#viewerContainer input[name='Name']");
   for (let x of List) {
     x.setAttribute("oninput", "inputPrevent(event)");
     x.setAttribute("autocomplete", "off");
+    x.setAttribute("required", "");
   }
   if(List.length == 0){
     setTimeout(function() {
@@ -199,12 +197,12 @@ const uint8ArrayToBase64 = async (data) => {
     reader.onload = () => r(reader.result);
     reader.readAsDataURL(new Blob([data]));
   });
-  return base64url.split(",", 2)[1];
+  return base64url;
 };
 
 const emailFormLoad = (docName) => {
   let form = document.forms["emailSendForm"];
-  let client = document.querySelector("#emailSendName");
+  //let client = document.querySelector("#emailSendName");
   let email = document.querySelector("#emailSendEmail");
   let date = document.querySelector("#emailSendDate");
   let button = document.querySelector("#emailSendBtn");
@@ -213,35 +211,17 @@ const emailFormLoad = (docName) => {
   
   form.onsubmit = async (e) => {
     e.preventDefault();
+    let client = document.querySelector("#viewerContainer input[name='Name']");
+    
     error.style.display = "none";
     loading.style.display = "block";
     button.innerText = "Sending..";
     
     const data = await PDFViewerApplication.pdfDocument.saveDocument();
     let result = await uint8ArrayToBase64(data);
-    const auth = "Z2hwXzRvQ2FCVmhRMU5wWjRIR3E4MmxqOVJXU2JyaTRtNDM3ekhQTA==";
-     
-    const octokit = new Octokit({
-      auth: window.atob(auth),
-    });
     
-    let fileId = client.value.replace(/ /g, "-") + new Date().getTime() + ".pdf";
-    let test = await octokit.request(
-      "PUT /repos/valleyobformdocument/documents/contents/" + fileId,
-          {
-            owner: "OWNER",
-            repo: "REPO",
-            path: "PATH",
-            message: "Added " + client.value + " pdf.",
-            committer: {
-            name: "ValleyOBForm",
-            email: "valleyobform@gmail.com",
-          },
-        content: result,
-      });
-      
     d.post(
-    "https://script.google.com/macros/s/AKfycbzLEX8OFSld2y-zSNGCw5oyqVWbqfoKO1kKrJ5n0cHJElKaNIQY0QnAQnLeGrR2eHzD/exec",
+    userGAS,
     {
       type: 2,
       data: JSON.stringify({
@@ -250,7 +230,7 @@ const emailFormLoad = (docName) => {
         email: email.value,
         date: date.value,
         name: client.value,
-        fileId: fileId,
+        file: result,
         id: "",
         database: window.d.messege
       }),
@@ -282,7 +262,21 @@ const emailShow = async (fileName, fileId) => {
   emailFormLoad(fileName);
   loadAll();
   logoutLoad();
-  let d_ = await convertDataURIToBinary(fileId);
+  let { messege } = JSON.parse(
+  await d.post(
+    userGAS,
+    {
+      type: 6,
+      data: JSON.stringify({
+        id: fileId
+      })
+    }
+  )
+  );
+
+  let {data} = JSON.parse(messege);
+
+  let d_ = convertDataURIToBinary(data);
   delete window.localStorage["pdfjs.history"];
   webViewerLoad();
   await PDFViewerApplication.open(d_);
@@ -344,7 +338,7 @@ const inboxLoad = () => {
   button.onclick = () => {
     document.querySelector("#body").innerHTML = page;
     d.post(
-      "https://script.google.com/macros/s/AKfycbzLEX8OFSld2y-zSNGCw5oyqVWbqfoKO1kKrJ5n0cHJElKaNIQY0QnAQnLeGrR2eHzD/exec",
+      userGAS,
       {
         type: 3,
         data: JSON.stringify({
@@ -366,16 +360,38 @@ const inboxLoad = () => {
   }
 }
 
-const downloadFile = (id) => {
-  const a = document.createElement("a");
-  a.style.display = "none";
-  a.target = "_blank";
-  a.href = "https://drive.google.com/uc?export=download&id=" + id;
-  a.download = id + ".pdf";
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
+const downloadFile = async (id, fileName) => {
+  let loading = document.querySelector("#loading");
+  loading.style.display = "block";
+  
+  let data = JSON.parse(JSON.parse(
+  await d.post(
+    userGAS,
+    {
+      type: 6,
+      data: JSON.stringify({
+        id: id
+      })
+    }
+  )).messege).data;
+  const anchor = document.createElement("a");
+  if ('download' in anchor) { //html5 A[download]
+	  anchor.href = "data:application/pdf;base64," + data;
+	  anchor.setAttribute("download", fileName);
+		anchor.innerHTML = "downloading...";
+	  anchor.style.display = "none";
+ 		anchor.addEventListener('click', function(e) {
+ 			e.stopPropagation();
+ 		});
+		document.body.appendChild(anchor);
+		setTimeout(function() {
+			anchor.click();
+			document.body.removeChild(anchor);
+			loading.style.display = "none";
+	  }, 66);
+  }
 }
+  
 
 window.downloadFile = downloadFile;
 
@@ -398,7 +414,7 @@ const showInboxData = (data, type = "") => {
   		<td>${x[2].substr(1)}</td>
   		<td>${x[3].substr(1)}</td>
   		<td>
-  		  <button onclick="downloadFile('${x[4].substr(1)}')" class="icon-btn download">
+  		  <button onclick="downloadFile('${x[4].substr(1)}', '${x[0].substr(1)}')" class="icon-btn download">
 					<span class="icon">
 						<img src="./asset/img/download.png" alt="Download"/ class="iconBlack"/>
 						<img src="./asset/img/download-white.png" alt="Download"/ class="iconBlue">
@@ -450,7 +466,7 @@ const historyLoad = () => {
   button.onclick = () => {
     document.querySelector("#body").innerHTML = page;
     d.post(
-      "https://script.google.com/macros/s/AKfycbzLEX8OFSld2y-zSNGCw5oyqVWbqfoKO1kKrJ5n0cHJElKaNIQY0QnAQnLeGrR2eHzD/exec",
+      userGAS,
       {
         type: 5,
         data: JSON.stringify({
@@ -522,39 +538,6 @@ const logoutLoad = () => {
     loginLoad();
   }
 }
-
-
-/*document.getElementById("root").innerHTML = emailPage;
-document.body.innerHTML = document.body.innerHTML 
-const docShow = async (id) => {
-const test = await d.getBlobData64(
-  "https://raw.githubusercontent.com/valleyobformdocument/documents/main/" +
-   "Test1657363990947.pdf"
-);
-
-function convertDataURIToBinary(dataURI) {
-  var raw = window.atob(dataURI);
-  var rawLength = raw.length;
-
-  var array = new Uint8Array(new ArrayBuffer(rawLength));
-  for (let i = 0; i < rawLength; i++) {
-    array[i] = raw.charCodeAt(i) & 0xff;
-  }
-  return array;
-}
-
-delete window.localStorage["pdfjs.history"];
-webViewerLoad()
-
-let _d = convertDataURIToBinary(test.split(",")[1])
-
-PDFViewerApplication.open(_d).then(() => {
-  document.getElementById("loading").style.display = "none";
-});
-}
-
-docShow();
-*/
 
 document.querySelector("#body").innerHTML = login;
 loginLoad();

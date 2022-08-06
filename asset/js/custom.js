@@ -1,7 +1,8 @@
 import { login } from "../../modules/login.js";
 import { userPage } from "../../modules/userPage.js";
 import { documentPage } from "../../modules/documentPage.js";
-import { Octokit } from "https://cdn.skypack.dev/@octokit/core";
+
+const adminGAS = "https://script.google.com/macros/s/AKfycbwGxEujY7EKh3xgV6V0XNLxQlcqW7L-dXKEK_m_/exec";
 
 const setCaretPosition = (e, pos) => {
   // Modern browsers
@@ -17,7 +18,7 @@ const setCaretPosition = (e, pos) => {
     range.moveStart('character', pos);
     range.select();
   }
-}
+};
 
 const loginLoad = () => {
   let username = document.querySelector("#username");
@@ -51,7 +52,7 @@ const loginLoad = () => {
    loginBtn.innerText = "Please Wait..";
    document.querySelector("#login-error").style.display = "none";
     d.post(
-      "https://script.google.com/macros/s/AKfycbwGxEujY7EKh3xgV6V0XNLxQlcqW7L-dXKEK_m_/exec",
+      adminGAS,
       {
         type: 0,
         data: JSON.stringify({
@@ -86,7 +87,7 @@ forgetBtn.onclick = () =>{
   loading.style.display = "block";
   
   d.post(
-    "https://script.google.com/macros/s/AKfycbwGxEujY7EKh3xgV6V0XNLxQlcqW7L-dXKEK_m_/exec",
+      adminGAS,
       {
         type: 14,
         data: JSON.stringify({
@@ -147,7 +148,7 @@ const showUserData = (data, type = "") => {
     button.onclick = async () => {
       loading.style.display = "block";
       let res = await d.post(
-        "https://script.google.com/macros/s/AKfycbwGxEujY7EKh3xgV6V0XNLxQlcqW7L-dXKEK_m_/exec",
+        adminGAS,
         {
           type: 4,
           data: JSON.stringify({
@@ -195,7 +196,7 @@ const backupFormLoad = () => {
     loading.style.display = "block";
     window.d.backup = backup.value.trim();
     d.post(
-      "https://script.google.com/macros/s/AKfycbwGxEujY7EKh3xgV6V0XNLxQlcqW7L-dXKEK_m_/exec",
+      adminGAS,
       {
         type: 13,
         data: JSON.stringify({
@@ -235,6 +236,73 @@ const changePasswordLoad = () => {
   let error = document.querySelector("#changePassword-error");
   let success = document.querySelector("#changePassword-success");
   
+  let $oldPass = "";
+  oldPass.oninput = (e) => {
+    let $password = $oldPass;
+    if(e.data){
+      $password = $password.substr(0, e.target.selectionStart - 1)
+         + e.data + $password.substr(e.target.selectionStart - 1);
+    } else{
+      $password = $password.substr(0, e.target.selectionStart)
+         + $password.substr(e.target.selectionStart + ($password.length - e.target.value.length));
+    }
+    
+    let start = e.target.selectionStart;
+    let value = e.target.value;
+    let result = ""
+    for(let i of value){
+      result += "•";
+    }
+    e.target.value = result;
+    setCaretPosition(e.target, start);
+    $oldPass = $password;
+  };
+  
+  let $newPass = "";
+  newPass.oninput = (e) => {
+    let $password = $newPass;
+    if(e.data){
+      $password = $password.substr(0, e.target.selectionStart - 1)
+         + e.data + $password.substr(e.target.selectionStart - 1);
+    } else{
+      $password = $password.substr(0, e.target.selectionStart)
+         + $password.substr(e.target.selectionStart + ($password.length - e.target.value.length));
+    }
+    
+    let start = e.target.selectionStart;
+    let value = e.target.value;
+    let result = ""
+    for(let i of value){
+      result += "•";
+    }
+    e.target.value = result;
+    setCaretPosition(e.target, start);
+    $newPass = $password;
+  };
+
+  let $conNewPass = "";
+  conNewPass.oninput = (e) => {
+    let $password = $conNewPass;
+    if(e.data){
+      $password = $password.substr(0, e.target.selectionStart - 1)
+         + e.data + $password.substr(e.target.selectionStart - 1);
+    } else{
+      $password = $password.substr(0, e.target.selectionStart)
+         + $password.substr(e.target.selectionStart + ($password.length - e.target.value.length));
+    }
+    
+    let start = e.target.selectionStart;
+    let value = e.target.value;
+    let result = ""
+    for(let i of value){
+      result += "•";
+    }
+    e.target.value = result;
+    setCaretPosition(e.target, start);
+    $conNewPass = $password;
+  };
+
+  
   document.forms["changePasswordForm"].onsubmit = (e) => {
     e.preventDefault();
     button.innerText = "Changing..";
@@ -242,7 +310,7 @@ const changePasswordLoad = () => {
     success.style.display = "none";
     loading.style.display = "block";
     
-    if(newPass.value != conNewPass.value){
+    if($newPass !== $conNewPass){
       button.innerText = "Change";
       error.innerText = 'Confirm password doesn\'t match.';
       error.style.display = "block";
@@ -250,12 +318,12 @@ const changePasswordLoad = () => {
       return;
     }
     d.post(
-      "https://script.google.com/macros/s/AKfycbwGxEujY7EKh3xgV6V0XNLxQlcqW7L-dXKEK_m_/exec",
+      adminGAS,
       {
       type: 5,
       data: JSON.stringify({
-        oldPass: oldPass.value,
-        newPass: newPass.value,
+        oldPass: $oldPass,
+        newPass: $newPass,
         database: window.d.messege,
       }),
     }
@@ -318,7 +386,7 @@ const addUserLoad = (data) => {
       ipValue = ipValue.slice(0, -1);
     }
     d.post(
-    "https://script.google.com/macros/s/AKfycbwGxEujY7EKh3xgV6V0XNLxQlcqW7L-dXKEK_m_/exec",
+    adminGAS,
     {
       type: 2,
       data: JSON.stringify({
@@ -369,7 +437,7 @@ const usersLoad = () => {
   button.onclick = () => {
     document.querySelector("#body").innerHTML = userPage;
     d.post(
-      "https://script.google.com/macros/s/AKfycbwGxEujY7EKh3xgV6V0XNLxQlcqW7L-dXKEK_m_/exec",
+      adminGAS,
       {
         type: 1,
         data: JSON.stringify({
@@ -410,7 +478,7 @@ const documentsLoad = () => {
   button.onclick = () => {
     document.querySelector("#body").innerHTML = documentPage;
     d.post(
-      "https://script.google.com/macros/s/AKfycbwGxEujY7EKh3xgV6V0XNLxQlcqW7L-dXKEK_m_/exec",
+      adminGAS,
       {
         type: 6,
         data: JSON.stringify({
@@ -523,7 +591,7 @@ const showDocumentData = (data, type = "") => {
     button.onclick = async () => {
       loading.style.display = "block";
       let res = await d.post(
-        "https://script.google.com/macros/s/AKfycbwGxEujY7EKh3xgV6V0XNLxQlcqW7L-dXKEK_m_/exec",
+        adminGAS,
         {
           type: 9,
           data: JSON.stringify({
@@ -553,7 +621,9 @@ const addDocumentLoad = (data) => {
   let error = document.querySelector("#addDocument-error");
   let success = document.querySelector("#addDocument-success");
   let loading = document.querySelector("#loading");
-   
+  
+  let errorModalMessege = document.querySelector("#modal-error");
+  
   document.forms["documentAddForm"].onsubmit = async (e) => {
     e.preventDefault();
     button.innerText = "Adding..";
@@ -570,37 +640,64 @@ const addDocumentLoad = (data) => {
     } 
     let fileData64 = await d.readFiles(file.files[0]);
     fileData64 = fileData64[0];
-    const auth = "Z2hwXzRvQ2FCVmhRMU5wWjRIR3E4MmxqOVJXU2JyaTRtNDM3ekhQTA==";
-    const octokit = new Octokit({
-        auth: window.atob(auth),
-      });
-      
-    let fileId = docName.value.replace(/ /g, "-") + new Date().getTime() + ".pdf";
-    let spitBase = fileData64.split(",");
-    //let type = spitBase[0].split(";")[0].replace("data:", "");
-    let uploadedFile = await octokit.request(
-      "PUT /repos/valleyobformdocument/documents/contents/" +
-        fileId,
-      {
-        owner: "OWNER",
-        repo: "REPO",
-        path: "PATH",
-        message: docName.value + " uploaded!",
-        committer: {
-          name: "ValleyOBForm",
-          email: "valleyobform@gmail.com",
-        },
-        content: spitBase[1],
+    
+    // pdf js
+    const pdfjsLib = window["pdfjs-dist/build/pdf"];
+    
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+    "../../pdf.js/build/pdf.worker.js";
+    
+    let err = [];
+    
+    let pdf = await pdfjsLib.getDocument(fileData64).promise;
+    let pagesNum = pdf.numPages;
+    let fields = await pdf.getFieldObjects();
+    console.log(fields);
+    
+    if(fields['Name'] == undefined){
+      err.push("Name");
+    }
+    
+    if(fields["Date"] == undefined){
+      err.push("Date");
+    }
+    
+    let sign = false;
+    for(let x = 1; x <= pagesNum; x++){
+      if(sign) break;
+      let page = await pdf.getPage(x);
+      let content = await page.getTextContent();
+    
+      for(let _x of content.items){
+        let {str} = _x;
+        if(str == "Signature:"){
+          sign = true;
+          break;
+        }
       }
-    );
+    }
+    
+    if(!sign){
+      err.push("Signature");
+    }
+    
+    if(err.length){
+      errorModalMessege.innerText = err.join(", ") + " Not Found.";
+      loading.style.display = "none";
+      button.innerText = "Add";
+      $("#addNewDocumentModal").modal('hide');
+      $("#errorModal").modal('show');
+      return;
+    }
+    
     d.post(
-    "https://script.google.com/macros/s/AKfycbwGxEujY7EKh3xgV6V0XNLxQlcqW7L-dXKEK_m_/exec",
+    adminGAS,
     {
       type: 7,
       data: JSON.stringify({
         date: "",
         fileName: docName.value,
-        fileId: fileId,
+        file: fileData64,
         database: window.d.messege,
       }),
     }
@@ -641,5 +738,4 @@ const logoutLoad = () => {
 
 document.querySelector("#body").innerHTML = login;
 loginLoad();
-
 

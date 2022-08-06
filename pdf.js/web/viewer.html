@@ -1187,21 +1187,33 @@ function convertDataURIToBinary(dataURI) {
   return array;
 }
 
+const adminGAS = "https://script.google.com/macros/s/AKfycbwGxEujY7EKh3xgV6V0XNLxQlcqW7L-dXKEK_m_/exec";
+
 const getPdf = async () => {
-const test = await d.getBlobData64(
-  "https://raw.githubusercontent.com/valleyobformdocument/documents/main/" +
-   GetURLParameter("fileId")
+let { messege } = JSON.parse(
+  await d.post(
+    adminGAS,
+    {
+      type: 15,
+      data: JSON.stringify({
+        id: GetURLParameter("fileId")
+      })
+    }
+  )
 );
 
+let {data} = JSON.parse(messege);
+
 delete window.localStorage["pdfjs.history"];
+
 PDFViewerApplication.open(
-  convertDataURIToBinary(test.split(",")[1])
+  convertDataURIToBinary(data)
 ).then(() => {
   document.getElementById("loading").style.display = "none";
 });
 }
 
-getPdf()
+window.onload = getPdf
     </script>
   </body>
 </html>
