@@ -1,4 +1,4 @@
-import {doc} from "./viewer.js";
+import { doc } from "./viewer.js";
 
 const $document = `
 	<section id="wrapper">
@@ -52,7 +52,7 @@ const $document = `
 				<div class="modal-body text-center">
 					<div class="signatureModContent">
 						<!--textarea name="" id=""></textarea-->
-						<canvas style="width: 100%; height: 200px; border: 1px solid #000; border-radius: 5px; margin-bottom: 15px" id="signCanvas"></canvas>
+						<canvas height="200" style="border: 1px solid #000; border-radius: 5px; margin-bottom: 15px" id="signCanvas"></canvas>
 						<div class="button-bx">
 							<button class="custom-btn" onclick="signatureSubmit(this)">Submit</button>
 							<button class="custom-btn close-btn" data-dismiss="modal" aria-label="Close">Cancel</button>
@@ -122,4 +122,4 @@ const $document = `
 	
 `;
 
-export {$document};
+export { $document };

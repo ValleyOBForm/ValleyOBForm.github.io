@@ -27,7 +27,7 @@ const login = `
   						</div><!-- col -->
   					</div><!-- row -->
   					<div id="forgetPassWord" style="text-align: right; margin-top: 15px; font-size: 14px; font-weight: 600; color: #004a7f; cursor: pointer;">
-  					  Forget Password
+  					  Forgot Password
             </div>
   					
   					<div style="color: red; text-align: center; font-size: 14px; margin-top: 10px; display: none;" id="login-error">
@@ -76,6 +76,6 @@ const login = `
       </div>
     </div>
 
-`
+`;
 
-export {login};
+export { login };

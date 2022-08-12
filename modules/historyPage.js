@@ -1,4 +1,4 @@
-const userPage = `
+const historyPage = `
 	<section id="wrapper">
 		<header class="site-header">
 			<div class="container-fluid">
@@ -39,7 +39,8 @@ const userPage = `
 
 					<div class="user-backup-table-wrapp">
 						<div class="user-popup-btns">
-							<button class="custom-btn" data-toggle="modal" data-target="#addNewUserModal">Add New User</button>
+							<button class="custom-btn" id="inbox">Inbox</button>
+							<button class="custom-btn" id="users">Users</button>
 							<button class="custom-btn" data-toggle="modal" data-target="#backupModal">Backup</button>
 							<button class="custom-btn" id="documents">Documents</button>
 							<button class="custom-btn" data-toggle="modal" data-target="#changePasswordModal">Change Password</button>
@@ -61,64 +62,6 @@ const userPage = `
       <div class="rect5"></div>
     </div>
   </div>
-
-	<!-- Modal Add new user -->
-	<div class="modal fade custom-modal" id="addNewUserModal" tabindex="-1" role="dialog" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close ml-auto" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-
-				<div class="modal-body">
-					<h3 class="modal-title text-center">Add New User</h3>
-
-					<section class="custom-form-sec">
-						<form class="icon-form" name="userAddForm" action="" method="post">
-							<div class="mdl-input-bx">
-								<label>Email</label>
-								<input type="email" name="" spellcheck="false" id="addUserEmail" class="form-control" autocomplete="off" required placeholder="Enter Email"/>
-							</div>
-
-							<div class="mdl-input-bx">
-								<label>Password</label>
-								<input type="text" spellcheck="false" name="" id="addUserPass" class="form-control" autocomplete="off" required placeholder="Enter Password"/>
-							</div>
-
-							<div class="mdl-input-bx">
-								<label>History</label>
-								<select name="" required class="form-control" id="addUserHistory">
-								  <option value=""></option>
-									<option value="0">0 Days</option>
-									<option value="7">7 Days</option>
-									<option value="30">30 Days</option>
-									<option value="90">90 Days</option>
-									<option value="180">180 Days</option>
-									<option value="365">365 Days</option>
-								</select>
-							</div>
-
-							<div class="mdl-input-bx">
-								<label>IP Address (Optional)</label>
-								<textarea type="text" name="" id="addUserIp" class="form-control" autocomplete="off" placeholder="Enter IP Address"></textarea>
-							</div>
-							<button type="submit" id="addUserBtn" class="custom-btn popSubmit">Add</button>
-							<div style="color: red; text-align: center; font-size: 14px; margin-top: 15px; display: none;" id="adduser-error">
-							  Please try again.
-							</div>
-							<div style="color: green; text-align: center; font-size: 14px; margin-top: 15px; display: none;" id="adduser-success">
-							  Success!
-							</div>
-						</form>
-					</section><!-- custom-form-sec -->
-
-				</div><!-- modal-body -->
-			</div>
-		</div>
-	</div>
-	<!-- modal -->
 
 	<!-- Modal backup -->
 	<div class="modal fade custom-modal" id="backupModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -206,4 +149,4 @@ const userPage = `
 	<!-- modal -->
 `;
 
-export { userPage };
+export { historyPage };
