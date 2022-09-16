@@ -73,7 +73,7 @@ const verifyLoad = () => {
           } else if (messege == "used") {
             error.style.display = "block";
             button.innerText = "Submit";
-            error.innerHTML = "Signeture already submitted!";
+            error.innerHTML = "Already Submitted!";
             loading.style.display = "none";
           } else if (messege == "verify") {
             error.style.display = "block";
@@ -193,7 +193,11 @@ const newRender = (type = "") => {
 
 const inputPrevent = (e) => {
   if (e.inputType == "insertText" || e.inputType == "insertCompositionText") {
-    e.target.value = e.target.value.slice(0, -1 * e.data.length);
+    let start = e.target.selectionStart - e.data.length;
+    e.target.value =
+      e.target.value.substr(0, e.target.selectionStart - e.data.length) +
+      e.target.value.substr(e.target.selectionStart);
+    d.setCaretPosition(e.target, start);
   }
 };
 
@@ -326,7 +330,7 @@ const signatureSubmit = async (button) => {
   const signDims = sign.scale(0.3);
 
   for (let i = 0; i < pages.length; i++) {
-    let x = pages[0];
+    let x = pages[i];
 
     // ip Address append
     const { width: width0, height: height0 } = x.getSize();

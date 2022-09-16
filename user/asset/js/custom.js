@@ -215,7 +215,11 @@ const newRender = (type = "") => {
 
 const inputPrevent = (e) => {
   if (e.inputType == "insertText" || e.inputType == "insertCompositionText") {
-    e.target.value = e.target.value.slice(0, -1 * e.data.length);
+    let start = e.target.selectionStart - e.data.length;
+    e.target.value =
+      e.target.value.substr(0, e.target.selectionStart - e.data.length) +
+      e.target.value.substr(e.target.selectionStart);
+    d.setCaretPosition(e.target, start);
   }
 };
 
