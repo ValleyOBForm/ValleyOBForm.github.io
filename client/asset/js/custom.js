@@ -128,7 +128,7 @@ const seeMessegeRequest = () => {
             backdrop: "static",
           });
         } else if (messege == "used") {
-          error.innerText = "Signeture already submitted.";
+          error.innerText = "Already Submitted.";
           $("#errorModal").modal({
             backdrop: "static",
           });
