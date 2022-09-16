@@ -1,5 +1,5 @@
 const d = {
-    post(url, data) {
+  post(url, data) {
     const form = new FormData();
     for (let x in data) {
       form.append(x, data[x]);
@@ -46,7 +46,23 @@ const d = {
           })
       );
   },
-}
+
+  // set caret position
+  setCaretPosition(e, pos) {
+    // Modern browsers
+    if (e.setSelectionRange) {
+      e.focus();
+      e.setSelectionRange(pos, pos);
+
+      // IE8 and below
+    } else if (e.createTextRange) {
+      var range = e.createTextRange();
+      range.collapse(true);
+      range.moveEnd("character", pos);
+      range.moveStart("character", pos);
+      range.select();
+    }
+  },
+};
 
 window.d = d;
-
