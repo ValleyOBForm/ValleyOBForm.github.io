@@ -7,22 +7,6 @@ import { historyPage } from "../../modules/historyPage.js";
 const adminGAS =
   "https://script.google.com/macros/s/AKfycbwGxEujY7EKh3xgV6V0XNLxQlcqW7L-dXKEK_m_/exec";
 
-const setCaretPosition = (e, pos) => {
-  // Modern browsers
-  if (e.setSelectionRange) {
-    e.focus();
-    e.setSelectionRange(pos, pos);
-
-    // IE8 and below
-  } else if (e.createTextRange) {
-    var range = e.createTextRange();
-    range.collapse(true);
-    range.moveEnd("character", pos);
-    range.moveStart("character", pos);
-    range.select();
-  }
-};
-
 const loginLoad = () => {
   let username = document.querySelector("#username");
   let password = document.querySelector("#password");
@@ -30,77 +14,8 @@ const loginLoad = () => {
 
   forgetPasswordLoad();
 
-  let $password = "";
-  let $prePass = "";
+  const { $password } = d.customPasword(password);
 
-  password.onpaste = (e) => {
-    $prePass = e.target.value;
-  };
-
-  password.onundo = (e) => {
-    e.preventDefault();
-  };
-  password.oninput = (e) => {
-    if (e.inputType == "historyUndo") return;
-    if (e.inputType == "insertText" || e.inputType == "insertCompositionText") {
-      if (e.data) {
-        $password =
-          $password.substr(0, e.target.selectionStart - 1) +
-          e.data +
-          $password.substr(e.target.selectionStart - 1);
-      } else {
-        $password =
-          $password.substr(0, e.target.selectionStart) +
-          $password.substr(
-            e.target.selectionStart + ($password.length - e.target.value.length)
-          );
-      }
-
-      let start = e.target.selectionStart;
-      let value = e.target.value;
-      let result = "";
-      for (let i of value) {
-        result += "•";
-      }
-      e.target.value = result;
-      setCaretPosition(e.target, start);
-      return;
-    }
-    if (e.target.value.length != e.target.selectionStart) {
-      $prePass = $prePass.slice(
-        0,
-        $prePass.length - e.target.value.length + e.target.selectionStart
-      );
-      $prePass = e.target.value
-        .slice(0, -e.target.value.length + e.target.selectionStart)
-        .substr($prePass.length);
-    } else if (e.inputType == "insertFromPaste") {
-      $prePass = e.target.value.substr($prePass.length);
-    }
-
-    if ($prePass) {
-      $password =
-        $password.substr(0, e.target.selectionStart - $prePass.length) +
-        $prePass +
-        $password.substr(e.target.selectionStart - $prePass.length);
-    } else {
-      $password =
-        $password.substr(0, e.target.selectionStart) +
-        $password.substr(
-          e.target.selectionStart + ($password.length - e.target.value.length)
-        );
-    }
-
-    $prePass = "";
-    let start = e.target.selectionStart;
-    let value = e.target.value;
-    let result = "";
-    for (let i of value) {
-      result += "•";
-    }
-    e.target.value = result;
-    setCaretPosition(e.target, start);
-  };
   document.forms["admin-login-form"].onsubmit = (e) => {
     e.preventDefault();
     loginBtn.disabled = true;
@@ -110,7 +25,7 @@ const loginLoad = () => {
       type: 0,
       data: JSON.stringify({
         userName: username.value.trim(),
-        password: $password,
+        password: $password(),
       }),
     }).then(async (res) => {
       res = JSON.parse(JSON.parse(res).messege);
@@ -301,86 +216,9 @@ const changePasswordLoad = () => {
   let error = document.querySelector("#changePassword-error");
   let success = document.querySelector("#changePassword-success");
 
-  let $oldPass = "";
-  oldPass.oninput = (e) => {
-    let $password = $oldPass;
-    if (e.data) {
-      $password =
-        $password.substr(0, e.target.selectionStart - 1) +
-        e.data +
-        $password.substr(e.target.selectionStart - 1);
-    } else {
-      $password =
-        $password.substr(0, e.target.selectionStart) +
-        $password.substr(
-          e.target.selectionStart + ($password.length - e.target.value.length)
-        );
-    }
-
-    let start = e.target.selectionStart;
-    let value = e.target.value;
-    let result = "";
-    for (let i of value) {
-      result += "•";
-    }
-    e.target.value = result;
-    setCaretPosition(e.target, start);
-    $oldPass = $password;
-  };
-
-  let $newPass = "";
-  newPass.oninput = (e) => {
-    let $password = $newPass;
-    if (e.data) {
-      $password =
-        $password.substr(0, e.target.selectionStart - 1) +
-        e.data +
-        $password.substr(e.target.selectionStart - 1);
-    } else {
-      $password =
-        $password.substr(0, e.target.selectionStart) +
-        $password.substr(
-          e.target.selectionStart + ($password.length - e.target.value.length)
-        );
-    }
-
-    let start = e.target.selectionStart;
-    let value = e.target.value;
-    let result = "";
-    for (let i of value) {
-      result += "•";
-    }
-    e.target.value = result;
-    setCaretPosition(e.target, start);
-    $newPass = $password;
-  };
-
-  let $conNewPass = "";
-  conNewPass.oninput = (e) => {
-    let $password = $conNewPass;
-    if (e.data) {
-      $password =
-        $password.substr(0, e.target.selectionStart - 1) +
-        e.data +
-        $password.substr(e.target.selectionStart - 1);
-    } else {
-      $password =
-        $password.substr(0, e.target.selectionStart) +
-        $password.substr(
-          e.target.selectionStart + ($password.length - e.target.value.length)
-        );
-    }
-
-    let start = e.target.selectionStart;
-    let value = e.target.value;
-    let result = "";
-    for (let i of value) {
-      result += "•";
-    }
-    e.target.value = result;
-    setCaretPosition(e.target, start);
-    $conNewPass = $password;
-  };
+  const { $password: $oldPass } = d.customPasword(oldPass);
+  const { $password: $newPass } = d.customPasword(newPass);
+  const { $password: $conNewPass } = d.customPasword(conNewPass);
 
   document.forms["changePasswordForm"].onsubmit = (e) => {
     e.preventDefault();
@@ -389,7 +227,7 @@ const changePasswordLoad = () => {
     success.style.display = "none";
     loading.style.display = "block";
 
-    if ($newPass !== $conNewPass) {
+    if ($newPass() !== $conNewPass()) {
       button.innerText = "Change";
       error.innerText = "Confirm password doesn't match.";
       error.style.display = "block";
@@ -399,8 +237,8 @@ const changePasswordLoad = () => {
     d.post(adminGAS, {
       type: 5,
       data: JSON.stringify({
-        oldPass: $oldPass,
-        newPass: $newPass,
+        oldPass: $oldPass(),
+        newPass: $newPass(),
         database: window.d.messege,
       }),
     })
