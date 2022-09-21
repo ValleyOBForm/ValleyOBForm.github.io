@@ -1,11 +1,11 @@
 let days, years;
 
-for (let date=1; date<=31; date++) {
-  days += `<option value=${date}>${date}</option>`
+for (let date = 1; date <= 31; date++) {
+  days += `<option value=${date}>${date}</option>`;
 }
 
-for (let year = 2022; year >= 1975; year--) {
-	years += `<option value=${year}>${year}</option>`;
+for (let year = 2022; year >= 1935; year--) {
+  years += `<option value=${year}>${year}</option>`;
 }
 
 const verify = `
@@ -111,4 +111,3 @@ const verify = `
 `;
 
 export { verify };
-
