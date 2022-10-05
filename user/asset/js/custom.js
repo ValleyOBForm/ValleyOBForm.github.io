@@ -263,11 +263,27 @@ const emailFormLoad = (docName) => {
   let error = document.querySelector("#error");
   let loading = document.querySelector("#loading");
 
+  date.onpaste = () => {
+    if((/^(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])\-\d{4}$/).test(date.value) == false){
+      error.style.display = "block";
+      error.innerText = "Date of Birth allow only MM-DD-YYYY format.";
+    } else{
+      error.style.display = "none";
+    }
+  }
+
   form.onsubmit = async (e) => {
     e.preventDefault();
     let client = document.querySelector("#viewerContainer input[name='Name']");
 
     error.style.display = "none";
+
+    if((/^(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])\-\d{4}$/).test(date.value) == false){
+      error.style.display = "block";
+      error.innerText = "Date of Birth allow only MM-DD-YYYY format.";
+      return;
+    }
+
     loading.style.display = "block";
     button.innerText = "Sending..";
 
@@ -297,6 +313,7 @@ const emailFormLoad = (docName) => {
           $("#sentEmailModal").modal("show");
         } else {
           console.log(res);
+          error.innerText = "Something is wrong. Please try again.";
           error.style.display = "block";
           button.innerText = "Send";
           loading.style.display = "none";
@@ -304,6 +321,7 @@ const emailFormLoad = (docName) => {
       })
       .catch((err) => {
         console.log(err);
+        error.innerText = "Something is wrong. Please try again.";
         error.style.display = "block";
         button.innerText = "Send";
         loading.style.display = "none";
